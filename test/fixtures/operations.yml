@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  scope: MyText
+  start_date: 2026-01-27
+  end_date: 2026-01-27
+
+two:
+  name: MyText
+  scope: MyText
+  start_date: 2026-01-27
+  end_date: 2026-01-27
