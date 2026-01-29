@@ -9,6 +9,34 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Resource routes for main entities
+  resources :operations do
+    member do
+      patch :close
+      post :generate_report
+    end
+    resources :targets, only: [:create]
+  end
+
+  resources :targets, only: [:show, :destroy]
+
+  resources :findings do
+    member do
+      patch :update_severity
+      post :attach_evidence
+      patch :mark_verified
+    end
+    resources :evidence, only: [:create]
+  end
+
+  resources :evidence, only: [:show, :destroy]
+
+  resources :reports do
+    member do
+      get :export_pdf
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

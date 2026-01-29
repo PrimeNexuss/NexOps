@@ -1,5 +1,5 @@
 class Target < ApplicationRecord
-    has_many :findings
+    has_many :finding
     belongs_to :operation
-    has_many :evidences, through: :findings
+    has_many :evidence, through: :finding
 end

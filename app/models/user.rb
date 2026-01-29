@@ -1,4 +1,4 @@
 class User < ApplicationRecord
-    has_many :operations
-    has_many :reports, through: :operations
+    has_many :operation
+    has_many :report, through: :operation
 end

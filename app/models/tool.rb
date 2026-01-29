@@ -1,3 +1,3 @@
 class Tool < ApplicationRecord
-    has_many :findings
+    has_many :finding
 end
