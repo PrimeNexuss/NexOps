@@ -1,0 +1,17 @@
+development:
+  connects_to:
+    database: cache
+  size_estimate_samples: 128
+  encrypt: false
+
+test:
+  connects_to:
+    database: cache
+  size_estimate_samples: 128
+  encrypt: false
+
+production:
+  connects_to:
+    database: cache
+  size_estimate_samples: 128
+  encrypt: true
