@@ -1,0 +1,280 @@
+<% content_for :title, "#{@finding.title} - NexOps" %>
+
+<div class="container">
+  <div class="d-flex justify-between align-center mb-5">
+    <div>
+      <h1><%= @finding.title %></h1>
+      <p class="text-secondary">
+        Target: <%= link_to @target.host_name, @target, class: "text-primary" %> | 
+        Operation: <%= link_to @operation.name, @operation, class: "text-primary" %>
+      </p>
+    </div>
+    <div class="d-flex gap-3">
+      <%= link_to "Edit Finding", edit_finding_path(@finding), class: "btn btn-outline" %>
+      <%= link_to "Add Evidence", "#", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <!-- Finding Overview -->
+  <div class="grid grid-cols-3 gap-4 mb-5">
+    <div class="card">
+      <h3>Finding Details</h3>
+      <div class="finding-info-grid">
+        <div class="info-item">
+          <span class="info-label">Severity:</span>
+          <span class="info-value">
+            <span class="badge badge-<%= @finding.severity == 'critical' ? 'danger' : @finding.severity %>"><%= @finding.severity.upcase %></span>
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Status:</span>
+          <span class="info-value">
+            <% if @finding.verified? %>
+              <span class="badge badge-success">Verified</span>
+            <% else %>
+              <span class="badge badge-warning">Pending</span>
+            <% end %>
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Tool:</span>
+          <span class="info-value"><%= @finding.tool&.name || 'Manual' %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Created:</span>
+          <span class="info-value"><%= @finding.created_at.strftime('%B %d, %Y') %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Quick Actions</h3>
+      <div class="actions-grid">
+        <% unless @finding.verified? %>
+          <%= link_to "Mark Verified", mark_verified_finding_path(@finding), method: :patch, class: "btn btn-success btn-full mb-2" %>
+        <% end %>
+        <%= link_to "Update Severity", "#", class: "btn btn-outline btn-full mb-2" %>
+        <%= link_to "Add Evidence", "#", class: "btn btn-outline btn-full mb-2" %>
+        <%= link_to "Download Report", "#", class: "btn btn-outline btn-full" %>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Impact Assessment</h3>
+      <div class="impact-metrics">
+        <div class="metric-item">
+          <div class="metric-value"><%= @finding.severity == 'critical' ? 'High' : @finding.severity == 'high' ? 'Medium' : 'Low' %></div>
+          <div class="metric-label">Risk Level</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value"><%= @evidences.count %></div>
+          <div class="metric-label">Evidence Files</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description Section -->
+  <div class="card mb-5">
+    <h2>Description</h2>
+    <div class="finding-description">
+      <p><%= @finding.description %></p>
+    </div>
+    
+    <% if @finding.recommendation.present? %>
+      <div class="recommendation-section mt-4">
+        <h3>Recommendation</h3>
+        <p class="text-secondary"><%= @finding.recommendation %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Evidence Section -->
+  <div class="card">
+    <div class="d-flex justify-between align-center mb-4">
+      <h2>Evidence Files</h2>
+      <%= link_to "Add Evidence", "#", class: "btn btn-primary" %>
+    </div>
+
+    <% if @evidences.any? %>
+      <div class="evidence-grid">
+        <% @evidences.each do |evidence| %>
+          <div class="evidence-item">
+            <div class="evidence-icon"></div>
+            <div class="evidence-info">
+              <div class="evidence-name"><%= evidence.file_path.filename.to_s %></div>
+              <div class="evidence-size"><%= number_to_human_size(evidence.file_path.byte_size) %></div>
+              <div class="evidence-time"><%= evidence.created_at.strftime('%B %d, %Y at %I:%M %p') %></div>
+            </div>
+            <div class="evidence-actions">
+              <%= link_to "Download", "#", class: "btn btn-sm btn-outline" %>
+              <%= link_to "Delete", evidence_path(evidence), method: :delete, class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center p-5">
+        <h3>No Evidence Yet</h3>
+        <p class="text-secondary">Upload evidence files to support this finding.</p>
+        <%= link_to "Add Evidence", "#", class: "btn btn-primary mt-3" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.finding-info-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.info-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.impact-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+
+.metric-item {
+  padding: 1rem;
+  background: var(--dark-bg);
+  border-radius: 8px;
+}
+
+.metric-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.finding-description {
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.recommendation-section {
+  border-top: 1px solid var(--dark-border);
+  padding-top: 1rem;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.evidence-item {
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.evidence-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.evidence-info {
+  flex: 1;
+}
+
+.evidence-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  word-break: break-all;
+}
+
+.evidence-size {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.125rem;
+}
+
+.evidence-time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.evidence-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .impact-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .evidence-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .evidence-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .evidence-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+</style>

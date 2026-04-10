@@ -1,0 +1,174 @@
+<% content_for :title, "Edit #{@target.host_name} - NexOps" %>
+
+<div class="container">
+  <div class="card max-width-800">
+    <div class="mb-5">
+      <h1>Edit Target</h1>
+      <p class="text-secondary">Update target information for <%= @target.host_name %></p>
+    </div>
+
+    <%= form_with(model: @target, local: true, class: "target-form") do |form| %>
+      <% if @target.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@target.errors.count, "error") %> prohibited this target from being saved:</h4>
+          <ul>
+            <% @target.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="form-group">
+          <%= form.label :host_name, class: "form-label" %>
+          <%= form.text_field :host_name, class: "form-control", placeholder: "Enter hostname", required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :ip_address, class: "form-label" %>
+          <%= form.text_field :ip_address, class: "form-control", placeholder: "Enter IP address", required: true %>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <%= form.label :os, class: "form-label" %>
+        <%= form.select :os, 
+            options_for_select([
+              ['Select OS', ''],
+              ['Windows', 'Windows'],
+              ['Linux', 'Linux'],
+              ['macOS', 'macOS'],
+              ['Unix', 'Unix'],
+              ['Cisco IOS', 'Cisco IOS'],
+              ['Other', 'Other']
+            ], @target.os),
+            { prompt: 'Select operating system' }, 
+            { class: "form-control" } %>
+      </div>
+
+      <div class="form-group mb-4">
+        <%= form.label :notes, class: "form-label" %>
+        <%= form.text_area :notes, class: "form-control", rows: 4, placeholder: "Add any additional notes about this target..." %>
+      </div>
+
+      <div class="form-group mb-5">
+        <div class="checkbox-wrapper">
+          <%= form.check_box :state_compromise, class: "form-checkbox" %>
+          <%= form.label :state_compromise, class: "checkbox-label" do %>
+            <span class="checkbox-text">Mark as compromised</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Update Target", class: "btn btn-primary" %>
+        <%= link_to "Cancel", @target, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Target Statistics -->
+  <div class="card mt-5">
+    <h2>Target Statistics</h2>
+    <div class="grid grid-cols-4">
+      <div class="text-center">
+        <h3 class="text-primary"><%= @target.findings.count %></h3>
+        <p class="text-secondary">Total Findings</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-danger"><%= @target.findings.where(severity: 'critical').count %></h3>
+        <p class="text-secondary">Critical</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-warning"><%= @target.findings.where(severity: 'high').count %></h3>
+        <p class="text-secondary">High</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-info"><%= @target.evidence.count %></h3>
+        <p class="text-secondary">Evidence Files</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.max-width-800 {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.form-checkbox:checked {
+  background: var(--gradient-primary);
+  border-color: var(--primary-color);
+}
+
+.form-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label {
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  border-top: 1px solid var(--dark-border);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+</style>

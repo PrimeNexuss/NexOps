@@ -1,0 +1,119 @@
+<% content_for :title, "Edit #{@operation.name} - NexOps" %>
+
+<div class="container">
+  <div class="card max-width-800">
+    <div class="mb-5">
+      <h1>Edit Operation</h1>
+      <p class="text-secondary">Update the details for <%= @operation.name %></p>
+    </div>
+
+    <%= form_with(model: @operation, local: true, class: "operation-form") do |form| %>
+      <% if @operation.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@operation.errors.count, "error") %> prohibited this operation from being saved:</h4>
+          <ul>
+            <% @operation.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group mb-4">
+        <%= form.label :name, class: "form-label" %>
+        <%= form.text_field :name, class: "form-control", placeholder: "Enter operation name", required: true %>
+        <small class="text-secondary">Give your operation a descriptive name</small>
+      </div>
+
+      <div class="form-group mb-4">
+        <%= form.label :scope, class: "form-label" %>
+        <%= form.text_area :scope, class: "form-control", rows: 4, placeholder: "Describe the scope of this operation...", required: true %>
+        <small class="text-secondary">Define what systems, networks, or applications are in scope</small>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="form-group">
+          <%= form.label :start_date, class: "form-label" %>
+          <%= form.date_field :start_date, class: "form-control", required: true %>
+          <small class="text-secondary">When does the operation start?</small>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :end_date, class: "form-label" %>
+          <%= form.date_field :end_date, class: "form-control" %>
+          <small class="text-secondary">When does the operation end? (optional)</small>
+        </div>
+      </div>
+
+      <div class="form-group mb-5">
+        <%= form.label :status, class: "form-label" %>
+        <%= form.select :status, 
+            options_for_select([['Active', 'active'], ['Planning', 'planning'], ['On Hold', 'on_hold'], ['Closed', 'closed']], @operation.status),
+            { prompt: 'Select status' }, 
+            { class: "form-control" } %>
+        <small class="text-secondary">Set the current status of this operation</small>
+      </div>
+
+      <div class="form-actions d-flex gap-3">
+        <%= form.submit "Update Operation", class: "btn btn-primary" %>
+        <%= link_to "Cancel", operation_path(@operation), class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Operation Statistics -->
+  <div class="card mt-5">
+    <h2>Operation Statistics</h2>
+    <div class="grid grid-cols-4">
+      <div class="text-center">
+        <h3 class="text-primary"><%= @operation.targets.count %></h3>
+        <p class="text-secondary">Targets</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-warning"><%= @operation.findings.count %></h3>
+        <p class="text-secondary">Findings</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-success"><%= @operation.evidence.count %></h3>
+        <p class="text-secondary">Evidence</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-info"><%= @operation.reports.count %></h3>
+        <p class="text-secondary">Reports</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.max-width-800 {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.operation-form .form-group {
+  position: relative;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  border-top: 1px solid var(--dark-border);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+</style>

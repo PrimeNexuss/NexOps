@@ -1,0 +1,177 @@
+<% content_for :title, "Operations - NexOps" %>
+
+<div class="container">
+  <!-- Header Section -->
+  <div class="d-flex justify-between align-center mb-5">
+    <div>
+      <h1>Security Operations</h1>
+      <p class="text-secondary">Manage and monitor your penetration testing operations</p>
+    </div>
+    <%= link_to "New Operation", new_operation_path, class: "btn btn-primary" %>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon">
+          🚀
+        </div>
+        <div>
+          <h3 class="text-primary"><%= @operations.count %></h3>
+          <p class="text-secondary">Total Operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon">
+          ✅
+        </div>
+        <div>
+          <h3 class="text-success"><%= @operations.where(status: 'active').count %></h3>
+          <p class="text-secondary">Active</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon">
+          🎯
+        </div>
+        <div>
+          <h3 class="text-warning"><%= @operations.joins(:targets).count %></h3>
+          <p class="text-secondary">Targets</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon">
+          🔍
+        </div>
+        <div>
+          <h3 class="text-danger"><%= @operations.joins(:findings).count %></h3>
+          <p class="text-secondary">Findings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operations List -->
+  <div class="card">
+    <div class="d-flex justify-between align-center mb-4">
+      <h2>Recent Operations</h2>
+      <div class="d-flex gap-3">
+        <input type="search" placeholder="Search operations..." class="form-control" style="width: 250px;">
+        <select class="form-control" style="width: 150px;">
+          <option>All Status</option>
+          <option>Active</option>
+          <option>Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <% if @operations.any? %>
+      <div class="grid grid-cols-2">
+        <% @operations.each do |operation| %>
+          <div class="card operation-card fade-in">
+            <div class="d-flex justify-between align-start mb-3">
+              <div>
+                <h3><%= link_to operation.name, operation_path(operation) %></h3>
+                <span class="badge badge-<%= operation.status == 'active' ? 'success' : 'warning' %>">
+                  <%= operation.status&.titleize || 'Active' %>
+                </span>
+              </div>
+              <div class="operation-actions">
+                <%= link_to "View", operation_path(operation), class: "btn btn-outline btn-sm" %>
+                <%= link_to "Edit", edit_operation_path(operation), class: "btn btn-secondary btn-sm" %>
+              </div>
+            </div>
+            
+            <p class="text-secondary mb-3"><%= operation.scope&.truncate(100) || 'No scope defined' %></p>
+            
+            <div class="d-flex justify-between align-center">
+              <div class="d-flex gap-4">
+                <div class="d-flex align-center gap-2">
+                  🎯 <span class="text-secondary"><%= operation.targets.count %> targets</span>
+                </div>
+                <div class="d-flex align-center gap-2">
+                  🔍 <span class="text-secondary"><%= operation.findings.count %> findings</span>
+                </div>
+              </div>
+              
+              <div class="text-secondary">
+                <small>
+                  <% if operation.start_date %>
+                    📅 <%= operation.start_date.strftime('%b %d, %Y') %>
+                    <% if operation.end_date %>
+                      - <%= operation.end_date.strftime('%b %d, %Y') %>
+                    <% end %>
+                  <% end %>
+                </small>
+              </div>
+            </div>
+            
+            <% if operation.status == 'active' %>
+              <div class="d-flex gap-2 mt-3">
+                <%= link_to "Close Operation", close_operation_path(operation), method: :patch, 
+                    class: "btn btn-outline btn-sm", 
+                    data: { confirm: "Are you sure you want to close this operation?" } %>
+                <%= link_to "Generate Report", generate_report_operation_path(operation), method: :post, 
+                    class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center p-5">
+        <div class="mb-4">
+          <h3>No Operations Yet</h3>
+          <p class="text-secondary">Start by creating your first security operation.</p>
+        </div>
+        <%= link_to "Create Operation", new_operation_path, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.stat-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.operation-card {
+  transition: all 0.3s ease;
+}
+
+.operation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.15);
+}
+
+.operation-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .operation-actions {
+    flex-direction: column;
+  }
+}
+</style>

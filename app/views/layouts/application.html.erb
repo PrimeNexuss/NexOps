@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "NexOps - Security Operations Platform" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="NexOps">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          🔒 NexOps
+        </div>
+        
+        <ul class="navbar-nav">
+          <li><%= link_to "Dashboard", root_path %></li>
+          <li><%= link_to "Operations", operations_path %></li>
+          <li><%= link_to "Targets", "#" %></li>
+          <li><%= link_to "Findings", "#" %></li>
+          <li><%= link_to "Reports", "#" %></li>
+        </ul>
+        
+        <!-- Search Bar -->
+        <div class="navbar-search">
+          <div class="search-container">
+            <input type="text" 
+                   class="search-input" 
+                   placeholder="Search operations, targets, findings..."
+                   id="global-search"
+                   autocomplete="off">
+            <button class="search-btn" onclick="performSearch()">
+              <span class="search-icon"></span>
+            </button>
+            <div class="search-suggestions" id="search-suggestions">
+              <div class="suggestions-loading" style="display: none;">
+                <div class="loading"></div>
+              </div>
+              <div class="suggestions-list" id="suggestions-list"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="navbar-actions">
+          <% if user_signed_in? %>
+            <!-- Notification Bell -->
+            <div class="notification-dropdown">
+              <button class="notification-bell" onclick="toggleNotifications()">
+                <span class="bell-icon"></span>
+                <span class="notification-count" id="notification-count">0</span>
+              </button>
+              
+              <div class="notification-menu" id="notification-menu">
+                <div class="notification-header">
+                  <h3>Notifications</h3>
+                  <button class="mark-all-read" onclick="markAllNotificationsRead()">Mark all read</button>
+                </div>
+                <div class="notification-list" id="notification-list">
+                  <div class="notification-loading">
+                    <div class="loading"></div>
+                  </div>
+                </div>
+                <div class="notification-footer">
+                  <%= link_to "View all notifications", "#" %>
+                </div>
+              </div>
+            </div>
+            
+            <span class="text-secondary">Welcome, <%= current_user.name || current_user.email %></span>
+            <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline" %>
+          <% else %>
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <% if notice %>
+      <div class="alert alert-success fade-in">
+        <%= notice %>
+      </div>
+    <% end %>
+    
+    <% if alert %>
+      <div class="alert alert-warning fade-in">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="d-flex justify-between align-center">
+          <p>&copy; 2026 NexOps. Advanced Security Operations Platform.</p>
+          <div class="d-flex gap-3">
+            <a href="#" class="text-secondary">Documentation</a>
+            <a href="#" class="text-secondary">Support</a>
+            <a href="#" class="text-secondary">API</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Notification System JavaScript -->
+    <script>
+      let notifications = [];
+      let notificationCount = 0;
+      let isNotificationMenuOpen = false;
+      const currentUserId = <%= user_signed_in? ? current_user.id : 'null' %>;
+
+      // Initialize notification system
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof currentUserId !== 'undefined') {
+          loadNotifications();
+          // Poll for new notifications every 30 seconds
+          setInterval(loadNotifications, 30000);
+        }
+      });
+
+      // Load notifications from server
+      async function loadNotifications() {
+        try {
+          const response = await fetch('/notifications.json');
+          const data = await response.json();
+          
+          notifications = data.notifications || [];
+          notificationCount = data.unread_count || 0;
+          
+          updateNotificationBell();
+          renderNotifications();
+        } catch (error) {
+          console.error('Error loading notifications:', error);
+        }
+      }
+
+      // Update notification bell count
+      function updateNotificationBell() {
+        const countElement = document.getElementById('notification-count');
+        if (countElement) {
+          countElement.textContent = notificationCount;
+          countElement.classList.toggle('show', notificationCount > 0);
+        }
+      }
+
+      // Render notifications in the dropdown
+      function renderNotifications() {
+        const listElement = document.getElementById('notification-list');
+        if (!listElement) return;
+
+        if (notifications.length === 0) {
+          listElement.innerHTML = '<div class="notification-empty">No notifications</div>';
+          return;
+        }
+
+        listElement.innerHTML = notifications.map(notification => `
+          <div class="notification-item ${!notification.read ? 'unread' : ''}" 
+               onclick="markNotificationAsRead(${notification.id})">
+            <div class="notification-content">
+              <div class="notification-icon ${notification.notification_type}">
+                ${getNotificationIcon(notification.notification_type)}
+              </div>
+              <div class="notification-details">
+                <div class="notification-title">${notification.title}</div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-time">${formatTime(notification.created_at)}</div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Get notification icon based on type
+      function getNotificationIcon(type) {
+        const icons = {
+          'success': '>',
+          'warning': '>',
+          'error': '>',
+          'info': '>'
+        };
+        return icons[type] || '>';
+      }
+
+      // Format notification time
+      function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = Math.floor((now - date) / 1000); // seconds
+
+        if (diff < 60) return 'Just now';
+        if (diff < 3600) return Math.floor(diff / 60) + ' minutes ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + ' hours ago';
+        return Math.floor(diff / 86400) + ' days ago';
+      }
+
+      // Toggle notification menu
+      function toggleNotifications() {
+        const menu = document.getElementById('notification-menu');
+        isNotificationMenuOpen = !isNotificationMenuOpen;
+        
+        if (isNotificationMenuOpen) {
+          menu.classList.add('show');
+          // Close menu when clicking outside
+          setTimeout(() => {
+            document.addEventListener('click', closeNotificationMenuOutside);
+          }, 100);
+        } else {
+          menu.classList.remove('show');
+          document.removeEventListener('click', closeNotificationMenuOutside);
+        }
+      }
+
+      // Close notification menu when clicking outside
+      function closeNotificationMenuOutside(event) {
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (!dropdown.contains(event.target)) {
+          const menu = document.getElementById('notification-menu');
+          menu.classList.remove('show');
+          isNotificationMenuOpen = false;
+          document.removeEventListener('click', closeNotificationMenuOutside);
+        }
+      }
+
+      // Mark notification as read
+      async function markNotificationAsRead(notificationId) {
+        try {
+          const response = await fetch(`/notifications/${notificationId}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            }
+          });
+
+          if (response.ok) {
+            // Update local notification
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+              notification.read = true;
+              notificationCount = Math.max(0, notificationCount - 1);
+              updateNotificationBell();
+              renderNotifications();
+            }
+          }
+        } catch (error) {
+          console.error('Error marking notification as read:', error);
+        }
+      }
+
+      // Mark all notifications as read
+      async function markAllNotificationsRead() {
+        try {
+          const response = await fetch('/notifications/mark_all_read', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            }
+          });
+
+          if (response.ok) {
+            notifications.forEach(n => n.read = true);
+            notificationCount = 0;
+            updateNotificationBell();
+            renderNotifications();
+          }
+        } catch (error) {
+          console.error('Error marking all notifications as read:', error);
+        }
+      }
+
+      // Create a new notification (for testing)
+      function createNotification(title, message, type = 'info') {
+        if (typeof currentUserId !== 'undefined') {
+          // This would typically be done server-side
+          console.log('Creating notification:', { title, message, type });
+        }
+      }
+
+      // Search functionality
+      let searchTimeout;
+      const searchInput = document.getElementById('global-search');
+      const searchSuggestions = document.getElementById('search-suggestions');
+      const suggestionsList = document.getElementById('suggestions-list');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          clearTimeout(searchTimeout);
+          const query = e.target.value.trim();
+          
+          if (query.length >= 2) {
+            searchTimeout = setTimeout(() => {
+              fetchSuggestions(query);
+            }, 300);
+          } else {
+            hideSuggestions();
+          }
+        });
+
+        searchInput.addEventListener('focus', function() {
+          if (this.value.trim().length >= 2) {
+            fetchSuggestions(this.value.trim());
+          }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.search-container')) {
+            hideSuggestions();
+          }
+        });
+
+        // Handle enter key
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            performSearch();
+          }
+        });
+      }
+
+      function fetchSuggestions(query) {
+        const loading = searchSuggestions.querySelector('.suggestions-loading');
+        loading.style.display = 'block';
+        suggestionsList.innerHTML = '';
+
+        fetch(`/search/suggestions?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            loading.style.display = 'none';
+            
+            if (data.suggestions && data.suggestions.length > 0) {
+              suggestionsList.innerHTML = data.suggestions.map(suggestion => `
+                <div class="suggestion-item" onclick="navigateToSuggestion('${suggestion.url}')">
+                  <div class="suggestion-content">
+                    <div class="suggestion-type">${suggestion.type.charAt(0).toUpperCase()}</div>
+                    <div class="suggestion-details">
+                      <div class="suggestion-title">${suggestion.title}</div>
+                      <div class="suggestion-type-label">${suggestion.type}</div>
+                    </div>
+                  </div>
+                </div>
+              `).join('');
+              showSuggestions();
+            } else {
+              suggestionsList.innerHTML = '<div class="suggestions-empty">No suggestions found</div>';
+              showSuggestions();
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching suggestions:', error);
+            loading.style.display = 'none';
+            suggestionsList.innerHTML = '<div class="suggestions-empty">Error loading suggestions</div>';
+            showSuggestions();
+          });
+      }
+
+      function showSuggestions() {
+        searchSuggestions.classList.add('show');
+      }
+
+      function hideSuggestions() {
+        searchSuggestions.classList.remove('show');
+      }
+
+      function navigateToSuggestion(url) {
+        window.location.href = url;
+      }
+
+      function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        }
+      }
+    </script>
+  </body>
+</html>

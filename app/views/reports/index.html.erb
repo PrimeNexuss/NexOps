@@ -1,0 +1,223 @@
+<% content_for :title, "Reports - NexOps" %>
+
+<div class="container">
+  <div class="d-flex justify-between align-center mb-5">
+    <div>
+      <h1>Security Reports</h1>
+      <p class="text-secondary">View and export comprehensive security reports</p>
+    </div>
+    <div class="d-flex gap-3">
+      <%= link_to "Generate Report", "#", class: "btn btn-primary" %>
+      <%= link_to "Schedule Reports", "#", class: "btn btn-outline" %>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-primary"><%= @total_reports %></h2>
+          <p class="text-secondary">Total Reports</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-success"><%= @recent_reports %></h2>
+          <p class="text-secondary">This Week</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-warning"><%= @reports.joins(:operation).where(operations: { status: 'active' }).count %></h2>
+          <p class="text-secondary">Active Operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-info"><%= @reports.joins(operation: :findings).count %></h2>
+          <p class="text-secondary">With Findings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reports List -->
+  <div class="card">
+    <div class="d-flex justify-between align-center mb-4">
+      <h2>All Reports</h2>
+      <div class="d-flex gap-3">
+        <select class="form-control" style="width: 150px;">
+          <option>All Operations</option>
+          <% @reports.map(&:operation).uniq.each do |op| %>
+            <option><%= op.name %></option>
+          <% end %>
+        </select>
+        <select class="form-control" style="width: 120px;">
+          <option>All Time</option>
+          <option>Last Week</option>
+          <option>Last Month</option>
+          <option>Last Quarter</option>
+        </select>
+      </div>
+    </div>
+
+    <% if @reports.any? %>
+      <div class="reports-grid">
+        <% @reports.each do |report| %>
+          <div class="report-card">
+            <div class="report-header">
+              <div class="report-info">
+                <h3><%= link_to "Report ##{report.id}", report_path(report), class: "text-primary" %></h3>
+                <p class="text-secondary">Operation: <%= link_to report.operation.name, report.operation, class: "text-primary" %></p>
+              </div>
+              <div class="report-date">
+                <span class="text-secondary"><%= report.generated_at.strftime('%B %d, %Y') %></span>
+              </div>
+            </div>
+            
+            <div class="report-stats">
+              <div class="stat-item">
+                <span class="stat-label">Targets:</span>
+                <span class="stat-value"><%= report.operation.targets.count %></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Findings:</span>
+                <span class="stat-value"><%= report.operation.findings.count %></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Critical:</span>
+                <span class="stat-value text-danger"><%= report.operation.findings.where(severity: 'critical').count %></span>
+              </div>
+            </div>
+            
+            <div class="report-actions">
+              <%= link_to "View", report_path(report), class: "btn btn-sm btn-outline" %>
+              <%= link_to "PDF", export_pdf_report_path(report), class: "btn btn-sm btn-primary" %>
+              <%= link_to "CSV", export_csv_report_path(report), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Delete", report_path(report), method: :delete, class: "btn btn-sm btn-danger", data: { confirm: "Are you sure you want to delete this report?" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center p-5">
+        <h3>No Reports Yet</h3>
+        <p class="text-secondary">Generate reports to track security findings and operations.</p>
+        <%= link_to "Generate Report", "#", class: "btn btn-primary mt-3" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.report-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+  border-color: var(--primary-color);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.report-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.report-info p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.report-date {
+  text-align: right;
+  font-size: 0.875rem;
+}
+
+.report-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--dark-bg);
+  border-radius: 8px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.report-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--dark-border);
+}
+
+@media (max-width: 768px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .report-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .report-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .report-actions {
+    flex-wrap: wrap;
+  }
+}
+</style>

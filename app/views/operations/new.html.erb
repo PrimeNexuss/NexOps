@@ -1,0 +1,177 @@
+<% content_for :title, "New Operation - NexOps" %>
+
+<div class="container">
+  <div class="card max-width-800">
+    <div class="mb-5">
+      <h1>Create New Operation</h1>
+      <p class="text-secondary">Set up a new security operation for penetration testing</p>
+    </div>
+
+    <%= form_with(model: @operation, local: true, class: "operation-form") do |form| %>
+      <% if @operation.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@operation.errors.count, "error") %> prohibited this operation from being saved:</h4>
+          <ul>
+            <% @operation.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group mb-4">
+        <%= form.label :name, class: "form-label" %>
+        <%= form.text_field :name, class: "form-control", placeholder: "Enter operation name", required: true %>
+        <small class="text-secondary">Give your operation a descriptive name</small>
+      </div>
+
+      <div class="form-group mb-4">
+        <%= form.label :scope, class: "form-label" %>
+        <%= form.text_area :scope, class: "form-control", rows: 4, placeholder: "Describe the scope of this operation...", required: true %>
+        <small class="text-secondary">Define what systems, networks, or applications are in scope</small>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="form-group">
+          <%= form.label :start_date, class: "form-label" %>
+          <%= form.date_field :start_date, class: "form-control", required: true %>
+          <small class="text-secondary">When does the operation start?</small>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :end_date, class: "form-label" %>
+          <%= form.date_field :end_date, class: "form-control" %>
+          <small class="text-secondary">When does the operation end? (optional)</small>
+        </div>
+      </div>
+
+      <div class="form-group mb-5">
+        <%= form.label :status, class: "form-label" %>
+        <%= form.select :status, 
+            options_for_select([['Active', 'active'], ['Planning', 'planning'], ['On Hold', 'on_hold']], 'active'),
+            { prompt: 'Select status' }, 
+            { class: "form-control" } %>
+        <small class="text-secondary">Set the current status of this operation</small>
+      </div>
+
+      <div class="form-actions d-flex gap-3">
+        <%= form.submit "Create Operation", class: "btn btn-primary" %>
+        <%= link_to "Cancel", operations_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Quick Start Templates -->
+  <div class="card mt-5">
+    <h2>Quick Start Templates</h2>
+    <p class="text-secondary mb-4">Use pre-configured templates for common operation types</p>
+    
+    <div class="grid grid-cols-3">
+      <div class="template-card">
+        <div class="template-icon">></div>
+        <h3>Web App Testing</h3>
+        <p class="text-secondary">Comprehensive web application security assessment</p>
+        <button class="btn btn-outline btn-sm" onclick="applyTemplate('webapp')">Use Template</button>
+      </div>
+      
+      <div class="template-card">
+        <div class="template-icon">></div>
+        <h3>Network Assessment</h3>
+        <p class="text-secondary">Internal and external network penetration testing</p>
+        <button class="btn btn-outline btn-sm" onclick="applyTemplate('network')">Use Template</button>
+      </div>
+      
+      <div class="template-card">
+        <div class="template-icon">></div>
+        <h3>API Testing</h3>
+        <p class="text-secondary">REST API and microservices security testing</p>
+        <button class="btn btn-outline btn-sm" onclick="applyTemplate('api')">Use Template</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.max-width-800 {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.operation-form .form-group {
+  position: relative;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.template-card {
+  text-align: center;
+  padding: 1.5rem;
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.template-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.template-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.form-actions {
+  border-top: 1px solid var(--dark-border);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+function applyTemplate(type) {
+  const templates = {
+    webapp: {
+      name: 'Web Application Security Assessment',
+      scope: 'Comprehensive security assessment of web application including:\n- Authentication and authorization\n- Input validation and XSS\n- SQL injection and injection flaws\n- Session management\n- Cryptographic storage\n- Business logic flaws\n- Access control issues',
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    },
+    network: {
+      name: 'Network Penetration Testing',
+      scope: 'Internal and external network security assessment:\n- Network enumeration and mapping\n- Vulnerability scanning\n- Exploitation of critical vulnerabilities\n- Post-exploitation activities\n- Privilege escalation\n- Lateral movement\n- Data exfiltration simulation',
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    },
+    api: {
+      name: 'API Security Testing',
+      scope: 'REST API and microservices security assessment:\n- Authentication and authorization\n- Input validation and injection\n- Rate limiting and DoS\n- Data exposure\n- Business logic flaws\n- CORS and CSP issues\n- API key management',
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    }
+  };
+
+  const template = templates[type];
+  if (template) {
+    document.getElementById('operation_name').value = template.name;
+    document.getElementById('operation_scope').value = template.scope;
+    document.getElementById('operation_start_date').value = template.start_date;
+    document.getElementById('operation_end_date').value = template.end_date;
+  }
+}
+</script>

@@ -1,0 +1,300 @@
+<% content_for :title, "Dashboard - NexOps" %>
+
+<div class="container">
+  <!-- Welcome Section -->
+  <div class="welcome-section mb-5">
+    <h1>Welcome to NexOps</h1>
+    <p class="text-secondary">Advanced Security Operations Platform</p>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-primary"><%= @total_operations %></h2>
+          <p class="text-secondary">Total Operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-success"><%= @active_operations %></h2>
+          <p class="text-secondary">Active Operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-warning"><%= @total_findings %></h2>
+          <p class="text-secondary">Total Findings</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-danger"><%= @critical_findings %></h2>
+          <p class="text-secondary">Critical Findings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="grid grid-cols-3">
+    <!-- Recent Operations -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <h2>Recent Operations</h2>
+        <%= link_to "View All", operations_path, class: "btn btn-outline btn-sm" %>
+      </div>
+      
+      <% if @recent_operations.any? %>
+        <div class="recent-list">
+          <% @recent_operations.each do |operation| %>
+            <div class="recent-item">
+              <div class="d-flex justify-between align-start">
+                <div>
+                  <h4><%= link_to operation.name, operation_path(operation) %></h4>
+                  <p class="text-secondary"><%= operation.scope&.truncate(60) %></p>
+                </div>
+                <span class="badge badge-<%= operation.status == 'active' ? 'success' : 'warning' %>">
+                  <%= operation.status&.titleize || 'Active' %>
+                </span>
+              </div>
+              <div class="d-flex gap-4 mt-2">
+                <small class="text-secondary">>
+                  <%= operation.targets.count %> targets
+                </small>
+                <small class="text-secondary">>
+                  <%= operation.findings.count %> findings
+                </small>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-secondary">No operations yet</p>
+          <%= link_to "Create Operation", new_operation_path, class: "btn btn-primary btn-sm" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Critical Findings -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <h2>Critical Findings</h2>
+        <%= link_to "View All", "#", class: "btn btn-outline btn-sm" %>
+      </div>
+      
+      <% if @critical_findings_list.any? %>
+        <div class="findings-list">
+          <% @critical_findings_list.each do |finding| %>
+            <div class="finding-item">
+              <div class="d-flex justify-between align-start">
+                <div>
+                  <h4><%= link_to finding.title, finding_path(finding) %></h4>
+                  <p class="text-secondary"><%= finding.description&.truncate(60) %></p>
+                </div>
+                <span class="badge badge-danger">Critical</span>
+              </div>
+              <div class="d-flex justify-between align-center mt-2">
+                <small class="text-secondary">Target: <%= finding.target.host_name %></small>
+                <small class="text-secondary">Operation: <%= finding.operation.name %></small>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-secondary">No critical findings</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <p class="text-secondary mb-4">Get started with common tasks</p>
+      
+      <div class="quick-actions">
+        <%= link_to "New Operation", new_operation_path, class: "btn btn-primary mb-3" %>
+        <%= link_to "Add Target", "#", class: "btn btn-secondary mb-3" %>
+        <%= link_to "Report Finding", "#", class: "btn btn-secondary mb-3" %>
+        <%= link_to "Generate Report", "#", class: "btn btn-outline mb-3" %>
+        <%= link_to "View Documentation", "#", class: "btn btn-outline" %>
+      </div>
+      
+      <!-- System Status -->
+      <div class="system-status mt-4">
+        <h3>System Status</h3>
+        <div class="status-item d-flex justify-between align-center">
+          <span>Database</span>
+          <span class="badge badge-success">Online</span>
+        </div>
+        <div class="status-item d-flex justify-between align-center">
+          <span>Services</span>
+          <span class="badge badge-success">Operational</span>
+        </div>
+        <div class="status-item d-flex justify-between align-center">
+          <span>Last Backup</span>
+          <span class="badge badge-warning">2 hours ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Timeline -->
+  <div class="card mt-5">
+    <h2>Recent Activity</h2>
+    <div class="timeline">
+      <% if @recent_activities.any? %>
+        <% @recent_activities.each do |activity| %>
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="d-flex justify-between align-start">
+                <div>
+                  <h4><%= activity[:title] %></h4>
+                  <p class="text-secondary"><%= activity[:description] %></p>
+                </div>
+                <small class="text-secondary"><%= activity[:time] %></small>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-secondary">No recent activity</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+.welcome-section h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card {
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.15);
+}
+
+.stat-icon.large {
+  font-size: 2.5rem;
+  opacity: 0.8;
+}
+
+.recent-item, .finding-item {
+  padding: 1rem;
+  border-bottom: 1px solid var(--dark-border);
+  transition: all 0.3s ease;
+}
+
+.recent-item:hover, .finding-item:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.recent-item:last-child, .finding-item:last-child {
+  border-bottom: none;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-actions .btn {
+  width: 100%;
+  text-align: center;
+}
+
+.system-status {
+  border-top: 1px solid var(--dark-border);
+  padding-top: 1rem;
+}
+
+.status-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--dark-border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--primary-color);
+  border: 2px solid var(--dark-bg);
+}
+
+.timeline-content {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  border-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .welcome-section h1 {
+    font-size: 2rem;
+  }
+  
+  .timeline {
+    padding-left: 1rem;
+  }
+}
+</style>

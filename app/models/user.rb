@@ -1,0 +1,58 @@
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+    has_many :operations, dependent: :destroy
+    has_many :reports, through: :operations
+    has_many :notifications, dependent: :destroy
+    has_many :search_queries, dependent: :destroy
+    has_many :user_roles, dependent: :destroy
+    has_many :roles, through: :user_roles
+    has_many :audit_logs, dependent: :destroy
+    
+    validates :name, presence: true, length: { minimum: 2, maximum: 100 }
+    validates :terms_accepted, acceptance: { message: 'must be accepted' }
+    
+    def unread_notifications
+      notifications.unread
+    end
+    
+    def notification_count
+      unread_notifications.count
+    end
+    
+    def has_permission?(permission)
+      roles.any? { |role| role.has_permission?(permission) }
+    end
+    
+    def has_role?(role_name)
+      roles.exists?(name: role_name.to_s)
+    end
+    
+    def role_names
+      roles.pluck(:name)
+    end
+    
+    def assign_role(role_name)
+      role = Role.find_by!(name: role_name.to_s)
+      user_roles.find_or_create_by!(role: role)
+    end
+    
+    def remove_role(role_name)
+      role = Role.find_by!(name: role_name.to_s)
+      user_roles.where(role: role).destroy_all
+    end
+    
+    def is_admin?
+      has_role?('admin')
+    end
+    
+    def is_operator?
+      has_role?('operator') || is_admin?
+    end
+    
+    def is_analyst?
+      has_role?('analyst') || is_operator?
+    end
+end

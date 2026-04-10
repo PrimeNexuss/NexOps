@@ -1,0 +1,200 @@
+<% content_for :title, "Targets - NexOps" %>
+
+<div class="container">
+  <div class="d-flex justify-between align-center mb-5">
+    <div>
+      <h1>Targets</h1>
+      <p class="text-secondary">Manage and monitor all target systems</p>
+    </div>
+    <div class="d-flex gap-3">
+      <%= link_to "New Target", new_target_path, class: "btn btn-primary" %>
+      <%= link_to "Bulk Import", "#", class: "btn btn-outline" %>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-primary"><%= @total_targets %></h2>
+          <p class="text-secondary">Total Targets</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-success"><%= @active_operations %></h2>
+          <p class="text-secondary">Active Operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-warning"><%= @targets.joins(:findings).count %></h2>
+          <p class="text-secondary">With Findings</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card stat-card">
+      <div class="d-flex align-center gap-3">
+        <div class="stat-icon large">></div>
+        <div>
+          <h2 class="text-danger"><%= @targets.joins(:findings).where(findings: { severity: 'critical' }).count %></h2>
+          <p class="text-secondary">Critical Issues</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Targets List -->
+  <div class="card">
+    <div class="d-flex justify-between align-center mb-4">
+      <h2>All Targets</h2>
+      <div class="d-flex gap-3">
+        <select class="form-control" style="width: 150px;">
+          <option>All Operations</option>
+          <% @targets.map(&:operation).uniq.each do |op| %>
+            <option><%= op.name %></option>
+          <% end %>
+        </select>
+        <select class="form-control" style="width: 120px;">
+          <option>All Status</option>
+          <option>Compromised</option>
+          <option>Not Compromised</option>
+        </select>
+      </div>
+    </div>
+
+    <% if @targets.any? %>
+      <div class="targets-grid">
+        <% @targets.each do |target| %>
+          <div class="target-card" onclick="window.location.href='<%= target_path(target) %>'">
+            <div class="target-header">
+              <div class="target-info">
+                <h3><%= target.host_name %></h3>
+                <p class="text-secondary"><%= target.ip_address %></p>
+              </div>
+              <div class="target-status">
+                <% if target.state_compromise %>
+                  <span class="badge badge-danger">Compromised</span>
+                <% else %>
+                  <span class="badge badge-success">Secure</span>
+                <% end %>
+              </div>
+            </div>
+            
+            <div class="target-details">
+              <div class="target-meta">
+                <span class="text-secondary">Operation:</span>
+                <span><%= link_to target.operation.name, target.operation, class: "text-primary" %></span>
+              </div>
+              <div class="target-meta">
+                <span class="text-secondary">OS:</span>
+                <span><%= target.os || 'Unknown' %></span>
+              </div>
+              <div class="target-meta">
+                <span class="text-secondary">Findings:</span>
+                <span><%= target.findings.count %></span>
+              </div>
+            </div>
+            
+            <div class="target-actions">
+              <%= link_to "View", target_path(target), class: "btn btn-sm btn-outline" %>
+              <%= link_to "Scan", scan_target_path(target), method: :post, class: "btn btn-sm btn-primary", data: { confirm: "Start security scan on #{target.host_name}?" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center p-5">
+        <h3>No Targets Yet</h3>
+        <p class="text-secondary">Add targets to operations to start monitoring security.</p>
+        <%= link_to "Add Target", new_target_path, class: "btn btn-primary mt-3" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.targets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.target-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.target-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+  border-color: var(--primary-color);
+}
+
+.target-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.target-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.target-info p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.target-details {
+  margin-bottom: 1rem;
+}
+
+.target-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.target-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--dark-border);
+}
+
+@media (max-width: 768px) {
+  .targets-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .target-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .target-actions {
+    flex-direction: column;
+  }
+}
+</style>

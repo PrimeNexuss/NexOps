@@ -1,0 +1,218 @@
+<% content_for :title, "#{@operation.name} - NexOps" %>
+
+<div class="container">
+  <!-- Operation Header -->
+  <div class="card mb-5">
+    <div class="d-flex justify-between align-start">
+      <div>
+        <div class="d-flex align-center gap-3 mb-3">
+          <h1><%= @operation.name %></h1>
+          <span class="badge badge-<%= @operation.status == 'active' ? 'success' : 'warning' %>">
+            <%= @operation.status&.titleize || 'Active' %>
+          </span>
+        </div>
+        <p class="text-secondary mb-3"><%= @operation.scope %></p>
+        <div class="d-flex gap-4">
+          <div class="d-flex align-center gap-2">
+            <span class="text-secondary">Started:</span>
+            <strong><%= @operation.start_date&.strftime('%B %d, %Y') || 'Not set' %></strong>
+          </div>
+          <div class="d-flex align-center gap-2">
+            <span class="text-secondary">Ends:</span>
+            <strong><%= @operation.end_date&.strftime('%B %d, %Y') || 'Not set' %></strong>
+          </div>
+          <div class="d-flex align-center gap-2">
+            <span class="text-secondary">Operator:</span>
+            <strong><%= @operation.user.name || @operation.user.email %></strong>
+          </div>
+        </div>
+      </div>
+      
+      <div class="d-flex gap-2">
+        <%= link_to "Edit", edit_operation_path(@operation), class: "btn btn-secondary" %>
+        <% if @operation.status == 'active' %>
+          <%= link_to "Close Operation", close_operation_path(@operation), method: :patch, 
+              class: "btn btn-outline", 
+              data: { confirm: "Are you sure you want to close this operation?" } %>
+        <% end %>
+        <%= link_to "Generate Report", generate_report_operation_path(@operation), method: :post, 
+            class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card text-center">
+      <div class="stat-icon mb-2"></div>
+      <h3 class="text-primary"><%= @operation.targets.count %></h3>
+      <p class="text-secondary">Targets</p>
+    </div>
+    
+    <div class="card text-center">
+      <div class="stat-icon mb-2">></div>
+      <h3 class="text-warning"><%= @operation.findings.count %></h3>
+      <p class="text-secondary">Findings</p>
+    </div>
+    
+    <div class="card text-center">
+      <div class="stat-icon mb-2">></div>
+      <h3 class="text-success"><%= @operation.findings.where(severity: 'critical').count %></h3>
+      <p class="text-secondary">Critical</p>
+    </div>
+    
+    <div class="card text-center">
+      <div class="stat-icon mb-2">></div>
+      <h3 class="text-info"><%= @operation.evidence.count %></h3>
+      <p class="text-secondary">Evidence</p>
+    </div>
+  </div>
+
+  <!-- Targets and Findings -->
+  <div class="grid grid-cols-2">
+    <!-- Targets Section -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <h2>Targets</h2>
+        <%= link_to "Add Target", new_operation_target_path(@operation), class: "btn btn-primary btn-sm" %>
+      </div>
+      
+      <% if @operation.targets.any? %>
+        <div class="targets-list">
+          <% @operation.targets.each do |target| %>
+            <div class="target-item">
+              <div class="d-flex justify-between align-center">
+                <div>
+                  <h4><%= target.host_name || 'Unknown Host' %></h4>
+                  <p class="text-secondary"><%= target.ip_address %></p>
+                </div>
+                <div class="d-flex gap-2">
+                  <%= link_to "View", target_path(target), class: "btn btn-outline btn-sm" %>
+                  <%= link_to "Delete", target_path(target), method: :delete, 
+                      class: "btn btn-outline btn-sm", 
+                      data: { confirm: "Are you sure?" } %>
+                </div>
+              </div>
+              
+              <div class="d-flex gap-4 mt-2">
+                <span class="badge badge-primary">
+                  <%= target.findings.count %> findings
+                </span>
+                <span class="badge badge-info">
+                  <%= target.evidence.count %> evidence
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-secondary">No targets added yet</p>
+          <%= link_to "Add Target", new_operation_target_path(@operation), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Findings Section -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <h2>Findings</h2>
+        <%= link_to "Add Finding", new_operation_finding_path(@operation), class: "btn btn-primary btn-sm" %>
+      </div>
+      
+      <% if @operation.findings.any? %>
+        <div class="findings-list">
+          <% @operation.findings.each do |finding| %>
+            <div class="finding-item">
+              <div class="d-flex justify-between align-start">
+                <div>
+                  <h4><%= finding.title %></h4>
+                  <p class="text-secondary"><%= finding.description&.truncate(80) %></p>
+                </div>
+                <span class="badge badge-<%= finding.severity == 'critical' ? 'danger' : finding.severity == 'high' ? 'warning' : 'info' %>">
+                  <%= finding.severity&.titleize || 'Medium' %>
+                </span>
+              </div>
+              
+              <div class="d-flex justify-between align-center mt-2">
+                <small class="text-secondary">Target: <%= finding.target.host_name %></small>
+                <div class="d-flex gap-2">
+                  <%= link_to "View", finding_path(finding), class: "btn btn-outline btn-sm" %>
+                  <%= link_to "Edit", edit_finding_path(finding), class: "btn btn-outline btn-sm" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-secondary">No findings yet</p>
+          <%= link_to "Add Finding", new_operation_finding_path(@operation), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Reports Section -->
+  <div class="card mt-5">
+    <div class="d-flex justify-between align-center mb-4">
+      <h2>Reports</h2>
+      <%= link_to "Generate Report", generate_report_operation_path(@operation), method: :post, 
+          class: "btn btn-primary" %>
+    </div>
+    
+    <% if @operation.reports.any? %>
+      <div class="reports-list">
+        <% @operation.reports.each do |report| %>
+          <div class="report-item d-flex justify-between align-center">
+            <div>
+              <h4>Report - <%= report.generated_at&.strftime('%B %d, %Y') || 'Not generated' %></h4>
+              <p class="text-secondary">Generated on <%= report.created_at.strftime('%B %d, %Y at %I:%M %p') %></p>
+            </div>
+            <div class="d-flex gap-2">
+              <%= link_to "View", report_path(report), class: "btn btn-outline btn-sm" %>
+              <%= link_to "Export PDF", export_pdf_report_path(report), class: "btn btn-primary btn-sm" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center p-4">
+        <p class="text-secondary">No reports generated yet</p>
+        <%= link_to "Generate Report", generate_report_operation_path(@operation), method: :post, 
+            class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.target-item, .finding-item, .report-item {
+  padding: 1rem;
+  border-bottom: 1px solid var(--dark-border);
+  transition: all 0.3s ease;
+}
+
+.target-item:hover, .finding-item:hover, .report-item:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.target-item:last-child, .finding-item:last-child, .report-item:last-child {
+  border-bottom: none;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>

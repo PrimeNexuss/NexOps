@@ -1,0 +1,63 @@
+<%- if controller_name != 'sessions' %>
+  <div class="auth-link-item">
+    <%= link_to "Sign in", new_session_path(resource_name) %>
+  </div>
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <div class="auth-link-item">
+    <%= link_to "Create account", new_registration_path(resource_name) %>
+  </div>
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <div class="auth-link-item">
+    <%= link_to "Forgot password?", new_password_path(resource_name) %>
+  </div>
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+  <div class="auth-link-item">
+    <%= link_to "Didn't receive confirmation?", new_confirmation_path(resource_name) %>
+  </div>
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+  <div class="auth-link-item">
+    <%= link_to "Didn't receive unlock?", new_unlock_path(resource_name) %>
+  </div>
+<% end %>
+
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <div class="auth-link-item">
+      <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "btn btn-outline btn-full" %>
+    </div>
+  <% end %>
+<% end %>
+
+<style>
+.auth-link-item {
+  margin-bottom: 0.75rem;
+}
+
+.auth-link-item:last-child {
+  margin-bottom: 0;
+}
+
+.auth-link-item a {
+  display: block;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.auth-link-item a:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary-dark);
+}
+</style>

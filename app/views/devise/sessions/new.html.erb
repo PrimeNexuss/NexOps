@@ -1,0 +1,345 @@
+<% content_for :title, "Sign In - NexOps" %>
+
+<div class="auth-card">
+  <div class="auth-header">
+    <h2>Welcome Back</h2>
+    <p class="auth-subtitle">Sign in to access your security operations dashboard</p>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
+      html: { class: "auth-form", data: { turbo: false } }) do |f| %>
+    
+    <% if resource.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(resource.errors.count, "error") %> prohibited sign in:</h4>
+        <ul>
+          <% resource.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :email, class: "form-label" %>
+      <div class="input-group">
+        <div class="input-icon">></div>
+        <%= f.email_field :email, class: "form-control", 
+            placeholder: "Enter your email address", 
+            autofocus: true, 
+            autocomplete: "email",
+            required: true %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, class: "form-label" %>
+      <div class="input-group">
+        <div class="input-icon">></div>
+        <%= f.password_field :password, class: "form-control", 
+            placeholder: "Enter your password", 
+            autocomplete: "current-password",
+            required: true %>
+        <button type="button" class="password-toggle" onclick="togglePassword(this)">
+          <span class="toggle-icon">></span>
+        </button>
+      </div>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="form-group checkbox-group">
+        <div class="checkbox-wrapper">
+          <%= f.check_box :remember_me, class: "form-checkbox" %>
+          <%= f.label :remember_me, class: "checkbox-label" do %>
+            <span class="checkbox-text">Remember me for 30 days</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="form-actions">
+      <%= f.submit "Sign In", class: "btn btn-primary btn-full" %>
+    </div>
+  <% end %>
+
+  <div class="auth-divider">
+    <span>or</span>
+  </div>
+
+  <div class="social-auth">
+    <button class="btn btn-outline btn-full">
+      <span class="social-icon">></span>
+      Continue with SSO
+    </button>
+  </div>
+
+  <div class="auth-links">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+
+<style>
+.auth-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.auth-form {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.form-control {
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-control::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: var(--primary-color);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.checkbox-group {
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.form-checkbox:checked {
+  background: var(--gradient-primary);
+  border-color: var(--primary-color);
+}
+
+.form-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label {
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  margin-bottom: 1.5rem;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.auth-divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.auth-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--dark-border);
+}
+
+.auth-divider span {
+  background: var(--dark-surface);
+  color: var(--text-secondary);
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  position: relative;
+}
+
+.social-auth {
+  margin-bottom: 1.5rem;
+}
+
+.social-icon {
+  margin-right: 0.5rem;
+}
+
+.auth-links {
+  text-align: center;
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .auth-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-control {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+  }
+  
+  .input-icon {
+    left: 0.75rem;
+  }
+}
+</style>
+
+<script>
+function togglePassword(button) {
+  const input = button.parentElement.querySelector('input[type="password"]');
+  const icon = button.querySelector('.toggle-icon');
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = '>';
+  } else {
+    input.type = 'password';
+    icon.textContent = '>';
+  }
+}
+
+// Add input focus effects
+document.querySelectorAll('.form-control').forEach(input => {
+  input.addEventListener('focus', function() {
+    this.parentElement.querySelector('.input-icon').style.color = 'var(--primary-color)';
+  });
+  
+  input.addEventListener('blur', function() {
+    this.parentElement.querySelector('.input-icon').style.color = 'var(--text-secondary)';
+  });
+});
+</script>

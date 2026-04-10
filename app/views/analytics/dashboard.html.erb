@@ -1,0 +1,635 @@
+<% content_for :title, "Analytics Dashboard - NexOps" %>
+
+<div class="container">
+  <div class="d-flex justify-between align-center mb-5">
+    <div>
+      <h1>Analytics Dashboard</h1>
+      <p class="text-secondary">Comprehensive security operations analytics and insights</p>
+    </div>
+    <div class="d-flex gap-3">
+      <select class="form-control" id="period-selector" onchange="changePeriod(this.value)">
+        <option value="7d" <%= @selected_period == '7d' ? 'selected' : '' %>>Last 7 Days</option>
+        <option value="30d" <%= @selected_period == '30d' ? 'selected' : '' %>>Last 30 Days</option>
+        <option value="90d" <%= @selected_period == '90d' ? 'selected' : '' %>>Last 90 Days</option>
+        <option value="1y" <%= @selected_period == '1y' ? 'selected' : '' %>>Last Year</option>
+      </select>
+      <%= link_to "Export Report", "#", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <!-- Key Metrics Overview -->
+  <div class="grid grid-cols-4 mb-5">
+    <div class="card metric-card">
+      <div class="metric-header">
+        <div class="metric-icon operations">></div>
+        <div class="metric-info">
+          <h3><%= @total_operations %></h3>
+          <p>Total Operations</p>
+        </div>
+      </div>
+      <div class="metric-trend">
+        <span class="trend-value positive">+<%= @recent_operations %></span>
+        <span class="trend-label">this week</span>
+      </div>
+    </div>
+    
+    <div class="card metric-card">
+      <div class="metric-header">
+        <div class="metric-icon targets">></div>
+        <div class="metric-info">
+          <h3><%= @total_targets %></h3>
+          <p>Total Targets</p>
+        </div>
+      </div>
+      <div class="metric-trend">
+        <span class="trend-value"><%= @compromised_targets %></span>
+        <span class="trend-label">compromised</span>
+      </div>
+    </div>
+    
+    <div class="card metric-card">
+      <div class="metric-header">
+        <div class="metric-icon findings">></div>
+        <div class="metric-info">
+          <h3><%= @total_findings %></h3>
+          <p>Total Findings</p>
+        </div>
+      </div>
+      <div class="metric-trend">
+        <span class="trend-value positive">+<%= @recent_findings %></span>
+        <span class="trend-label">this week</span>
+      </div>
+    </div>
+    
+    <div class="card metric-card">
+      <div class="metric-header">
+        <div class="metric-icon reports">></div>
+        <div class="metric-info">
+          <h3><%= @total_reports %></h3>
+          <p>Total Reports</p>
+        </div>
+      </div>
+      <div class="metric-trend">
+        <span class="trend-value positive">+<%= @recent_reports %></span>
+        <span class="trend-label">this week</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Overview -->
+  <div class="grid grid-cols-2 gap-4 mb-5">
+    <div class="card">
+      <h2>Security Status</h2>
+      <div class="security-metrics">
+        <div class="security-item critical">
+          <div class="security-icon">!</div>
+          <div class="security-info">
+            <h3><%= @critical_findings %></h3>
+            <p>Critical Findings</p>
+          </div>
+        </div>
+        
+        <div class="security-item high">
+          <div class="security-icon">!</div>
+          <div class="security-info">
+            <h3><%= @high_findings %></h3>
+            <p>High Severity</p>
+          </div>
+        </div>
+        
+        <div class="security-item verified">
+          <div class="security-icon">></div>
+          <div class="security-info">
+            <h3><%= @verified_findings %></h3>
+            <p>Verified Findings</p>
+          </div>
+        </div>
+        
+        <div class="security-item compromised">
+          <div class="security-icon">!</div>
+          <div class="security-info">
+            <h3><%= @compromised_targets %></h3>
+            <p>Compromised Targets</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Findings Severity Distribution</h2>
+      <div class="severity-chart">
+        <div class="chart-container">
+          <div class="chart-bar">
+            <div class="bar-segment critical" style="width: <%= calculate_percentage(@severity_distribution[:critical], @total_findings) %>%">
+              <span class="bar-label">Critical</span>
+            </div>
+            <div class="bar-segment high" style="width: <%= calculate_percentage(@severity_distribution[:high], @total_findings) %>%">
+              <span class="bar-label">High</span>
+            </div>
+            <div class="bar-segment medium" style="width: <%= calculate_percentage(@severity_distribution[:medium], @total_findings) %>%">
+              <span class="bar-label">Medium</span>
+            </div>
+            <div class="bar-segment low" style="width: <%= calculate_percentage(@severity_distribution[:low], @total_findings) %>%">
+              <span class="bar-label">Low</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="severity-legend">
+          <div class="legend-item">
+            <span class="legend-color critical"></span>
+            <span class="legend-text">Critical (<%= @severity_distribution[:critical] %>)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color high"></span>
+            <span class="legend-text">High (<%= @severity_distribution[:high] %>)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color medium"></span>
+            <span class="legend-text">Medium (<%= @severity_distribution[:medium] %>)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color low"></span>
+            <span class="legend-text">Low (<%= @severity_distribution[:low] %>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Trends -->
+  <div class="grid grid-cols-2 gap-4 mb-5">
+    <div class="card">
+      <h2>Operations Trend</h2>
+      <div class="trend-chart">
+        <div class="chart-placeholder">
+          <div class="chart-line">
+            <% @operations_trend.each do |date, count| %>
+              <div class="chart-point" style="height: <%= calculate_chart_height(count, @operations_trend.values.max) %>px" title="<%= date.strftime('%b %d') %>: <%= count %>"></div>
+            <% end %>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <div class="stat-item">
+            <span class="stat-label">Period Total:</span>
+            <span class="stat-value"><%= @operations_data[:total] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Active:</span>
+            <span class="stat-value"><%= @operations_data[:active] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Avg Duration:</span>
+            <span class="stat-value"><%= @operations_data[:avg_duration] %> days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Findings Trend</h2>
+      <div class="trend-chart">
+        <div class="chart-placeholder">
+          <div class="chart-line">
+            <% @findings_trend.each do |date, count| %>
+              <div class="chart-point" style="height: <%= calculate_chart_height(count, @findings_trend.values.max) %>px" title="<%= date.strftime('%b %d') %>: <%= count %>"></div>
+            <% end %>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <div class="stat-item">
+            <span class="stat-label">Period Total:</span>
+            <span class="stat-value"><%= @findings_data[:total] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Verified:</span>
+            <span class="stat-value"><%= @findings_data[:verified] %></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Critical:</span>
+            <span class="stat-value text-danger"><%= @findings_data[:critical] %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resource Distribution -->
+  <div class="grid grid-cols-3 gap-4 mb-5">
+    <div class="card">
+      <h2>Resource Types</h2>
+      <div class="resource-chart">
+        <% @resource_types.each do |type, count| %>
+          <div class="resource-item">
+            <div class="resource-label"><%= type.humanize %></div>
+            <div class="resource-bar">
+              <div class="resource-fill" style="width: <%= calculate_percentage(count, @resource_types.values.sum) %>%"></div>
+            </div>
+            <div class="resource-count"><%= count %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Target Operating Systems</h2>
+      <div class="os-chart">
+        <% @targets_data[:by_os].each do |os, count| %>
+          <div class="os-item">
+            <div class="os-label"><%= os || 'Unknown' %></div>
+            <div class="os-bar">
+              <div class="os-fill" style="width: <%= calculate_percentage(count, @targets_data[:total]) %>%"></div>
+            </div>
+            <div class="os-count"><%= count %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>User Activity</h2>
+      <div class="activity-chart">
+        <% @user_activity_data[:actions_by_type].each do |action, count| %>
+          <div class="activity-item">
+            <div class="activity-label"><%= action.humanize %></div>
+            <div class="activity-bar">
+              <div class="activity-fill" style="width: <%= calculate_percentage(count, @user_activity_data[:total_actions]) %>%"></div>
+            </div>
+            <div class="activity-count"><%= count %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Tables -->
+  <div class="card">
+    <h2>Recent Activity Summary</h2>
+    <div class="activity-table">
+      <div class="table-header">
+        <div class="table-cell">Date</div>
+        <div class="table-cell">Operations</div>
+        <div class="table-cell">Targets</div>
+        <div class="table-cell">Findings</div>
+        <div class="table-cell">Reports</div>
+      </div>
+      
+      <% (6.downto(0)).each do |days_ago| %>
+        <% date = days_ago.days.ago.to_date %>
+        <div class="table-row">
+          <div class="table-cell"><%= date.strftime('%b %d') %></div>
+          <div class="table-cell"><%= current_user.operations.where(created_at: date.all_day).count %></div>
+          <div class="table-cell"><%= current_user.targets.joins(:operation).where('operations.created_at' => date.all_day).count %></div>
+          <div class="table-cell"><%= current_user.findings.joins(:operation).where('operations.created_at' => date.all_day).count %></div>
+          <div class="table-cell"><%= current_user.reports.where(created_at: date.all_day).count %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+function changePeriod(period) {
+  window.location.href = `/analytics?period=${period}`;
+}
+
+function calculate_percentage(value, total) {
+  return total > 0 ? ((value.to_f / total) * 100).round : 0;
+}
+
+function calculate_chart_height(value, max_value) {
+  return max_value > 0 ? ((value.to_f / max_value) * 100).round : 0;
+}
+</script>
+
+<style>
+.metric-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: white;
+  font-weight: bold;
+}
+
+.metric-icon.operations { background: var(--primary-color); }
+.metric-icon.targets { background: var(--success); }
+.metric-icon.findings { background: var(--warning); }
+.metric-icon.reports { background: var(--info); }
+
+.metric-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.metric-info p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.metric-trend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trend-value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.trend-value.positive {
+  color: var(--success);
+}
+
+.trend-value.negative {
+  color: var(--danger);
+}
+
+.trend-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.security-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.security-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--dark-bg);
+}
+
+.security-item.critical { background: rgba(220, 38, 38, 0.1); }
+.security-item.high { background: rgba(245, 158, 11, 0.1); }
+.security-item.verified { background: rgba(34, 197, 94, 0.1); }
+.security-item.compromised { background: rgba(239, 68, 68, 0.1); }
+
+.security-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+}
+
+.security-item.critical .security-icon { background: var(--danger); }
+.security-item.high .security-icon { background: var(--warning); }
+.security-item.verified .security-icon { background: var(--success); }
+.security-item.compromised .security-icon { background: var(--danger); }
+
+.security-info h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.security-info p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.severity-chart {
+  margin-top: 1rem;
+}
+
+.chart-container {
+  margin-bottom: 1rem;
+}
+
+.chart-bar {
+  display: flex;
+  height: 30px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.bar-segment.critical { background: var(--danger); }
+.bar-segment.high { background: var(--warning); }
+.bar-segment.medium { background: var(--info); }
+.bar-segment.low { background: var(--success); }
+
+.severity-legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-color.critical { background: var(--danger); }
+.legend-color.high { background: var(--warning); }
+.legend-color.medium { background: var(--info); }
+.legend-color.low { background: var(--success); }
+
+.trend-chart {
+  margin-top: 1rem;
+}
+
+.chart-placeholder {
+  height: 150px;
+  margin-bottom: 1rem;
+  background: var(--dark-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart-line {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 100%;
+  width: 100%;
+}
+
+.chart-point {
+  background: var(--primary-color);
+  border-radius: 4px 4px 0 0;
+  flex: 1;
+  min-height: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chart-point:hover {
+  background: var(--primary-color-light);
+}
+
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 0.5rem;
+  background: var(--dark-bg);
+  border-radius: 6px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.resource-chart, .os-chart, .activity-chart {
+  margin-top: 1rem;
+}
+
+.resource-item, .os-item, .activity-item {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.resource-label, .os-label, .activity-label {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.resource-bar, .os-bar, .activity-bar {
+  height: 8px;
+  background: var(--dark-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.resource-fill, .os-fill, .activity-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.resource-count, .os-count, .activity-count {
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.activity-table {
+  margin-top: 1rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  font-weight: 600;
+  padding: 1rem;
+  background: var(--dark-bg);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 1rem;
+  border-bottom: 1px solid var(--dark-border);
+  transition: all 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.table-cell {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .security-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .severity-legend {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .resource-item, .os-item, .activity-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .table-header, .table-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .table-cell {
+    text-align: center;
+  }
+}
+</style>

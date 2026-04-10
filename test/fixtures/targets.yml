@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ip_address: 1
+  host_name: MyString
+  operation_id: 1
+
+two:
+  ip_address: 1
+  host_name: MyString
+  operation_id: 1

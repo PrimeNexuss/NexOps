@@ -1,0 +1,332 @@
+<% content_for :title, "API Documentation - NexOps" %>
+
+<div class="container">
+  <div class="mb-5">
+    <h1>NexOps API Documentation</h1>
+    <p class="text-secondary">RESTful API for NexOps Security Operations Platform</p>
+  </div>
+
+  <!-- API Overview -->
+  <div class="card mb-5">
+    <h2>API Overview</h2>
+    <div class="api-overview">
+      <div class="overview-section">
+        <h3>Base URL</h3>
+        <code class="api-url">https://your-domain.com/api/v1</code>
+      </div>
+      
+      <div class="overview-section">
+        <h3>Authentication</h3>
+        <p>All API endpoints require authentication using session cookies. Users must be logged into the NexOps web application to access the API.</p>
+      </div>
+      
+      <div class="overview-section">
+        <h3>Response Format</h3>
+        <p>All responses are in JSON format. Successful responses return the requested data, while errors return an <code>errors</code> array with descriptive messages.</p>
+      </div>
+      
+      <div class="overview-section">
+        <h3>HTTP Status Codes</h3>
+        <ul class="status-codes">
+          <li><code>200</code> - OK: Request successful</li>
+          <li><code>201</code> - Created: Resource successfully created</li>
+          <li><code>204</code> - No Content: Resource successfully deleted</li>
+          <li><code>401</code> - Unauthorized: Authentication required</li>
+          <li><code>403</code> - Forbidden: Insufficient permissions</li>
+          <li><code>404</code> - Not Found: Resource not found</li>
+          <li><code>422</code> - Unprocessable Entity: Validation errors</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Endpoints -->
+  <div class="card">
+    <h2>API Endpoints</h2>
+    <div class="endpoints-list">
+      <% @api_endpoints.each do |endpoint| %>
+        <div class="endpoint-item">
+          <div class="endpoint-header">
+            <div class="endpoint-method <%= endpoint.method.downcase %>"><%= endpoint.method %></div>
+            <div class="endpoint-path"><code><%= endpoint.path %></code></div>
+          </div>
+          
+          <div class="endpoint-description">
+            <p><%= endpoint.description %></p>
+          </div>
+          
+          <% if endpoint.parameters.any? %>
+            <div class="endpoint-parameters">
+              <h4>Parameters</h4>
+              <div class="parameters-list">
+                <% endpoint.parameters.each do |param| %>
+                  <div class="parameter-item">
+                    <code class="parameter-name"><%= param %></code>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="endpoint-response">
+            <h4>Response</h4>
+            <p><%= endpoint.response %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Code Examples -->
+  <div class="card mt-5">
+    <h2>Code Examples</h2>
+    
+    <div class="example-section">
+      <h3>JavaScript (Fetch API)</h3>
+      <pre class="code-example"><code>// Get all operations
+const response = await fetch('/api/v1/operations', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+  },
+  credentials: 'same-origin'
+});
+
+const data = await response.json();
+console.log(data.operations);</code></pre>
+    </div>
+    
+    <div class="example-section">
+      <h3>Python (Requests)</h3>
+      <pre class="code-example"><code>import requests
+
+# Get all operations (requires session cookies)
+response = requests.get(
+    'https://your-domain.com/api/v1/operations',
+    cookies={'_session_id': 'your_session_cookie'}
+)
+
+data = response.json()
+print(data['operations'])</code></pre>
+    </div>
+    
+    <div class="example-section">
+      <h3>cURL</h3>
+      <pre class="code-example"><code># Get all operations
+curl -X GET \
+  https://your-domain.com/api/v1/operations \
+  -H 'Content-Type: application/json' \
+  --cookie "_session_id=your_session_cookie"</code></pre>
+    </div>
+  </div>
+
+  <!-- Data Models -->
+  <div class="card mt-5">
+    <h2>Data Models</h2>
+    
+    <div class="model-section">
+      <h3>Operation</h3>
+      <pre class="model-example"><code>{
+  "id": 1,
+  "name": "Security Assessment",
+  "scope": "Internal network scan",
+  "status": "active",
+  "start_date": "2024-01-15",
+  "end_date": "2024-01-20",
+  "targets_count": 5,
+  "findings_count": 12,
+  "reports_count": 2,
+  "created_at": "2024-01-15T10:00:00Z",
+  "updated_at": "2024-01-15T10:00:00Z"
+}</code></pre>
+    </div>
+    
+    <div class="model-section">
+      <h3>Target</h3>
+      <pre class="model-example"><code>{
+  "id": 1,
+  "host_name": "server.example.com",
+  "ip_address": "192.168.1.100",
+  "os": "Ubuntu 20.04",
+  "state_compromise": false,
+  "findings_count": 3
+}</code></pre>
+    </div>
+    
+    <div class="model-section">
+      <h3>Finding</h3>
+      <pre class="model-example"><code>{
+  "id": 1,
+  "title": "Open SSH Port",
+  "description": "SSH port 22 is open and accessible",
+  "severity": "medium",
+  "verified": false,
+  "target_id": 1,
+  "created_at": "2024-01-15T10:30:00Z"
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- Rate Limiting -->
+  <div class="card mt-5">
+    <h2>Rate Limiting</h2>
+    <p>API requests are rate limited to prevent abuse:</p>
+    <ul>
+      <li>100 requests per minute per user</li>
+      <li>1000 requests per hour per user</li>
+      <li>Rate limit headers are included in responses</li>
+    </ul>
+  </div>
+
+  <!-- Support -->
+  <div class="card mt-5">
+    <h2>Support</h2>
+    <p>For API support and questions:</p>
+    <ul>
+      <li>Email: api-support@nexops.com</li>
+      <li>Documentation: <a href="/api/docs">/api/docs</a></li>
+      <li>Status Page: <a href="/status">/status</a></li>
+    </ul>
+  </div>
+</div>
+
+<style>
+.api-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.overview-section h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.api-url {
+  background: var(--dark-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: monospace;
+  color: var(--primary-color);
+}
+
+.status-codes {
+  list-style: none;
+  padding: 0;
+}
+
+.status-codes li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-codes code {
+  background: var(--dark-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--text-primary);
+}
+
+.endpoints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.endpoint-item {
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--dark-surface);
+}
+
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.endpoint-method {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  min-width: 60px;
+  text-align: center;
+}
+
+.endpoint-method.get { background: var(--success); color: white; }
+.endpoint-method.post { background: var(--primary-color); color: white; }
+.endpoint-method.patch, .endpoint-method.put { background: var(--warning); color: white; }
+.endpoint-method.delete { background: var(--danger); color: white; }
+
+.endpoint-path code {
+  background: var(--dark-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: monospace;
+  color: var(--text-primary);
+}
+
+.endpoint-parameters, .endpoint-response {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--dark-border);
+}
+
+.endpoint-parameters h4, .endpoint-response h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.parameters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.parameter-item {
+  background: var(--dark-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.parameter-name {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.example-section, .model-section {
+  margin-bottom: 2rem;
+}
+
+.example-section h3, .model-section h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.code-example, .model-example {
+  background: var(--dark-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+</style>
