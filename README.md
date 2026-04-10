@@ -1,4 +1,4 @@
-# NexOps - Security Operations Platform
+# NexOps - Security Operations Platform.
 
 <div align="center">
 
