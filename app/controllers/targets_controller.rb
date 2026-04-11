@@ -1,6 +1,11 @@
 class TargetsController < ApplicationController
   before_action :set_target, only: [:show, :edit, :update, :destroy]
   before_action :set_operation, only: [:create, :new]
+  before_action :require_read_targets_permission, only: [:index, :show]
+  before_action :require_create_targets_permission, only: [:new, :create]
+  before_action :require_update_targets_permission, only: [:edit, :update]
+  before_action :require_delete_targets_permission, only: [:destroy]
+  before_action :require_scan_targets_permission, only: [:scan]
 
   # GET /targets
   def index
@@ -94,5 +99,26 @@ class TargetsController < ApplicationController
 
   def target_params
     params.require(:target).permit(:host_name, :ip_address, :os, :notes, :state_compromise)
+  end
+
+  # Permission methods
+  def require_read_targets_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('read_targets')
+  end
+
+  def require_create_targets_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('create_targets')
+  end
+
+  def require_update_targets_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('update_targets')
+  end
+
+  def require_delete_targets_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('delete_targets')
+  end
+
+  def require_scan_targets_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('scan_targets')
   end
 end

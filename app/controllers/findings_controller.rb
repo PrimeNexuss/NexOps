@@ -1,6 +1,11 @@
 class FindingsController < ApplicationController
   before_action :set_finding, only: [:show, :edit, :update, :destroy, :update_severity, :attach_evidence, :mark_verified]
   before_action :set_target, only: [:new, :create]
+  before_action :require_read_findings_permission, only: [:index, :show]
+  before_action :require_create_findings_permission, only: [:new, :create]
+  before_action :require_update_findings_permission, only: [:edit, :update, :update_severity]
+  before_action :require_delete_findings_permission, only: [:destroy]
+  before_action :require_verify_findings_permission, only: [:mark_verified, :attach_evidence]
 
   # GET /findings
   def index
@@ -103,5 +108,26 @@ class FindingsController < ApplicationController
 
   def evidence_params
     params.require(:evidence).permit(:file_path)
+  end
+
+  # Permission methods
+  def require_read_findings_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('read_findings')
+  end
+
+  def require_create_findings_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('create_findings')
+  end
+
+  def require_update_findings_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('update_findings')
+  end
+
+  def require_delete_findings_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('delete_findings')
+  end
+
+  def require_verify_findings_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('verify_findings')
   end
 end

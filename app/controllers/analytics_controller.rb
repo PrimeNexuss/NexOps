@@ -1,5 +1,6 @@
 class AnalyticsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_analytics_permission
 
   def dashboard
     # Time periods for analytics
@@ -135,6 +136,18 @@ class AnalyticsController < ApplicationController
       (op.end_date - op.start_date).to_i
     end
     (total_days / completed_operations.count).round(1)
+  end
+
+  private
+
+  def require_analytics_permission
+    # Analytics is available to users with read permissions on any resource
+    has_any_permission = current_user.has_permission?('read_operations') ||
+                        current_user.has_permission?('read_targets') ||
+                        current_user.has_permission?('read_findings') ||
+                        current_user.has_permission?('read_reports')
+    
+    redirect_to root_path, alert: "Access denied" unless has_any_permission
   end
 end
 

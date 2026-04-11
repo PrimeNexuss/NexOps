@@ -1,6 +1,10 @@
 class ReportsController < ApplicationController
   before_action :set_report, only: [:show, :export_pdf, :destroy]
   before_action :set_operation, only: [:create, :new]
+  before_action :require_read_reports_permission, only: [:index, :show]
+  before_action :require_create_reports_permission, only: [:new, :create]
+  before_action :require_delete_reports_permission, only: [:destroy]
+  before_action :require_export_reports_permission, only: [:export_pdf, :export_csv]
 
   # GET /reports
   def index
@@ -184,5 +188,22 @@ class ReportsController < ApplicationController
 
   def report_params
     params.require(:report).permit(:notes, :report_type)
+  end
+
+  # Permission methods
+  def require_read_reports_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('read_reports')
+  end
+
+  def require_create_reports_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('create_reports')
+  end
+
+  def require_delete_reports_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('delete_reports')
+  end
+
+  def require_export_reports_permission
+    redirect_to root_path, alert: "Access denied" unless current_user.has_permission?('export_reports')
   end
 end
