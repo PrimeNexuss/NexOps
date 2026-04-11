@@ -23,7 +23,7 @@ bin/rails server
 2. **Click "Sign Up"** (top right corner)
 3. **Fill in the form:**
    - Name: `PrimeNexuss`
-   - Email: `primenexuss@nexops.com`
+   - Email: `primenexuss@gmail.com` (Gmail address required)
    - Password: `password123`
    - **Role Selection**: Choose **Admin** (for full demo access)
    - Check "Accept Terms"
@@ -42,7 +42,7 @@ bin/rails server
 bin/rails console
 
 # Then copy-paste these commands one by one:
-user = User.find_by(email: "primenexuss@nexops.com")
+user = User.find_by(email: "primenexuss@gmail.com")
 op1 = user.operations.create(name: "Web Security Assessment", scope: "Test our main website", status: "active")
 op2 = user.operations.create(name: "Network Penetration Test", scope: "Test internal network", status: "active")
 

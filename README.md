@@ -57,7 +57,8 @@ NexOps is a comprehensive security operations platform designed for penetration 
 | Feature | Description | Status |
 |---------|-------------|--------|
 | **Role-based Access Control** | Admin, Operator, Analyst, Guest roles with signup selection | :heavy_check_mark: |
-| **User Registration** | Self-service signup with role selection | :heavy_check_mark: |
+| **User Registration** | Self-service signup with Gmail email requirement | :heavy_check_mark: |
+| **Email Validation** | Gmail-only email addresses for security | :heavy_check_mark: |
 | **Granular Permissions** | Fine-grained access to system resources | :heavy_check_mark: |
 | **Audit Logging** | Complete activity trail for compliance | :heavy_check_mark: |
 | **Secure Authentication** | Devise-based authentication with session management | :heavy_check_mark: |
@@ -224,7 +225,7 @@ NexOps is a comprehensive security operations platform designed for penetration 
 1. **Create your account**
    - Visit `http://localhost:3000`
    - Click "Sign Up"
-   - Fill in your details, select your role, and accept terms
+   - Fill in your details (Gmail email required), select your role, and accept terms
 
 2. **Choose your role during signup**
    - **Admin**: Full system access and user management

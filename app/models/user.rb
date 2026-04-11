@@ -14,6 +14,7 @@ class User < ApplicationRecord
     has_many :audit_logs, dependent: :destroy
     
     validates :name, presence: true, length: { minimum: 2, maximum: 100 }
+    validates :email, presence: true, format: { with: /\A.+@gmail\.com\z/, message: 'must be a Gmail address (example@gmail.com)' }
     validates :terms_accepted, acceptance: { message: 'must be accepted' }
     
     def unread_notifications

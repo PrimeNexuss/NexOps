@@ -27,10 +27,14 @@
       <div class="input-group">
         <div class="input-icon">></div>
         <%= f.email_field :email, class: "form-control", 
-            placeholder: "Enter your email address", 
+            placeholder: "Enter your Gmail address", 
             autocomplete: "email",
             required: true %>
       </div>
+      <small class="form-hint">
+        <span class="hint-icon">></span>
+        Only Gmail addresses are supported (example@gmail.com)
+      </small>
     </div>
 
     <div class="form-group">
