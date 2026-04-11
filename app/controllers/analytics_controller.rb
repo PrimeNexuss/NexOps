@@ -149,19 +149,25 @@ class AnalyticsController < ApplicationController
     
     redirect_to root_path, alert: "Access denied" unless has_any_permission
   end
-end
+
+  # Helper methods for views
+  def calculate_percentage(value, total)
+    return 0 if total.zero?
+    ((value.to_f / total) * 100).round(1)
+  end
 
 # Add helper methods to ActiveRecord for grouping
 class ActiveRecord::Relation
   def group_by_month(start_date)
-    where('created_at >= ?', start_date)
-      .group("DATE_TRUNC('month', created_at)")
+    where("#{table_name}.created_at >= ?", start_date)
+      .group("DATE_TRUNC('month', #{table_name}.created_at)")
       .count
   end
 
   def group_by_day(start_date)
-    where('created_at >= ?', start_date)
-      .group("DATE_TRUNC('day', created_at)")
+    where("#{table_name}.created_at >= ?", start_date)
+      .group("DATE_TRUNC('day', #{table_name}.created_at)")
       .count
+  end
   end
 end

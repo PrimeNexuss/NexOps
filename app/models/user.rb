@@ -68,4 +68,12 @@ class User < ApplicationRecord
     def is_analyst?
       has_role?('analyst') || is_operator?
     end
+    
+    def operator_or_admin?
+      is_operator? || is_admin?
+    end
+    
+    def admin?
+      is_admin?
+    end
 end

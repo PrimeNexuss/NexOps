@@ -221,7 +221,7 @@
       <div class="resource-chart">
         <% @resource_types.each do |type, count| %>
           <div class="resource-item">
-            <div class="resource-label"><%= type.humanize %></div>
+            <div class="resource-label"><%= type.to_s.humanize %></div>
             <div class="resource-bar">
               <div class="resource-fill" style="width: <%= calculate_percentage(count, @resource_types.values.sum) %>%"></div>
             </div>

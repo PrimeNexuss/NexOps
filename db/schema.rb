@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_11_151833) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_11_195315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,12 +57,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_11_151833) do
 
   create_table "findings", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "default"
     t.text "description"
+    t.string "false"
     t.integer "operation_id"
     t.text "severity"
     t.integer "target_id"
     t.text "title"
     t.datetime "updated_at", null: false
+    t.boolean "verified"
   end
 
   create_table "hosts", force: :cascade do |t|
@@ -136,9 +139,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_11_151833) do
 
   create_table "targets", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "default"
+    t.string "false"
     t.string "host_name"
     t.string "ip_address"
     t.integer "operation_id"
+    t.string "os"
+    t.boolean "state_compromise"
     t.datetime "updated_at", null: false
   end
 
