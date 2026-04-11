@@ -88,4 +88,8 @@ class Role < ApplicationRecord
   def permission_list
     permissions.map { |perm| perm.humanize }
   end
+  
+  def name_with_description
+    "#{name.humanize} - #{description}"
+  end
 end

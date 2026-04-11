@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
     has_many :operations, dependent: :destroy
+    has_many :targets, through: :operations
+    has_many :findings, through: :targets
     has_many :reports, through: :operations
     has_many :notifications, dependent: :destroy
     has_many :search_queries, dependent: :destroy
