@@ -85,7 +85,7 @@
       <div class="input-group">
         <div class="input-icon">></div>
         <%= select_tag :role_name, 
-            options_from_collection_for_select(Role.where(name: ['admin', 'analyst', 'operator', 'guest']), :name, :name_with_description),
+            options_from_collection_for_select(Role.where(name: ['admin', 'analyst', 'operator', 'guest']), :name, :name),
             { prompt: "Select your role", class: "form-control", required: true } %>
       </div>
       <small class="form-hint">
