@@ -63,7 +63,7 @@ class Role < ApplicationRecord
         description: 'Security analyst with read and analysis access'
       },
       {
-        name: 'viewer',
+        name: 'guest',
         permissions: %w[
           read_operations
           read_targets

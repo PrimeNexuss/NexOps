@@ -56,7 +56,7 @@ NexOps is a comprehensive security operations platform designed for penetration 
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| **Role-based Access Control** | Admin, Operator, Analyst, Viewer roles | :heavy_check_mark: |
+| **Role-based Access Control** | Admin, Operator, Analyst, Guest roles | :heavy_check_mark: |
 | **Granular Permissions** | Fine-grained access to system resources | :heavy_check_mark: |
 | **Audit Logging** | Complete activity trail for compliance | :heavy_check_mark: |
 | **Multi-factor Authentication** | Secure user authentication | :heavy_check_mark: |
@@ -196,7 +196,7 @@ NexOps is a comprehensive security operations platform designed for penetration 
 | **Admin** | Full system access, user management, audit logs |
 | **Operator** | Create/Manage operations, targets, findings |
 | **Analyst** | View analytics, generate reports, verify findings |
-| **Viewer** | Read-only access to reports and dashboards |
+| **Guest** | Read-only access to reports and dashboards |
 
 ### Key Workflows
 
@@ -287,7 +287,7 @@ The system creates these default roles on first run:
 - **Admin**: Full system access
 - **Operator**: Operations and targets management
 - **Analyst**: Analytics and reporting
-- **Viewer**: Read-only access
+- **Guest**: Read-only access
 
 ### Permissions
 
