@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :redirect_based_on_role
   before_action :set_page_title
   before_action :set_breadcrumb
 
@@ -24,6 +23,36 @@ class ApplicationController < ActionController::Base
     unless current_user.has_permission?(permission)
       flash[:alert] = "You are not authorized to perform this action."
       redirect_back(fallback_location: root_path)
+    end
+  end
+
+  def redirect_based_on_role
+    return unless user_signed_in?
+
+    case current_user.role&.name
+    when 'admin'
+      # Admins can access everything
+      nil
+    when 'operator'
+      # Operators can access most pages
+      if request.path.starts_with?('/roles') || request.path.starts_with?('/audit_logs')
+        flash[:alert] = "Access denied. Admin privileges required."
+        redirect_to operations_path
+      end
+    when 'analyst'
+      # Analysts have limited access
+      restricted_paths = ['/roles', '/audit_logs', '/users']
+      if restricted_paths.any? { |path| request.path.starts_with?(path) }
+        flash[:alert] = "Access denied. Insufficient privileges."
+        redirect_to operations_path
+      end
+    when 'guest'
+      # Guests have read-only access
+      restricted_paths = ['/roles', '/audit_logs', '/users', '/operations/new', '/operations/edit']
+      if restricted_paths.any? { |path| request.path.starts_with?(path) }
+        flash[:alert] = "Access denied. Guest users have read-only access."
+        redirect_to operations_path
+      end
     end
   end
 

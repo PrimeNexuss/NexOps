@@ -1,4 +1,54 @@
 class RolesController < ApplicationController
+  before_action :authenticate_admin!
+  
+  def index
+    @roles = Role.all
+    @users = User.all
+  end
+  
+  def show
+    @role = Role.find(params[:id])
+    @users = @role.users
+  end
+  
+  def new
+    @role = Role.new
+  end
+  
+  def create
+    @role = Role.new(role_params)
+    if @role.save
+      redirect_to @role, notice: 'Role was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+  
+  def edit
+    @role = Role.find(params[:id])
+  end
+  
+  def update
+    @role = Role.find(params[:id])
+    if @role.update(role_params)
+      redirect_to @role, notice: 'Role was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+  
+  def destroy
+    @role = Role.find(params[:id])
+    @role.destroy
+    redirect_to roles_path, notice: 'Role was successfully deleted.'
+  end
+  
+  private
+  
+  def role_params
+    params.require(:role).permit(:name, :description)
+  end
+end
   before_action :require_admin
   before_action :set_role, only: [:show, :edit, :update, :destroy]
 

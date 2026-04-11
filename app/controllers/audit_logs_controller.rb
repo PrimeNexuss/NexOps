@@ -1,5 +1,5 @@
 class AuditLogsController < ApplicationController
-  before_action :require_admin
+  before_action :authenticate_admin!
   before_action :set_audit_log, only: [:show]
 
   # GET /audit_logs

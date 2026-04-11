@@ -37,19 +37,22 @@ module PageAccess
     when 'operator'
       # Operators can access most pages
       if request.path.starts_with?('/roles') || request.path.starts_with?('/audit_logs')
-        redirect_to operations_path, alert: "Access denied. Admin privileges required."
+        flash[:alert] = "Access denied. Admin privileges required."
+        redirect_to operations_path
       end
     when 'analyst'
       # Analysts have limited access
       restricted_paths = ['/roles', '/audit_logs', '/users']
       if restricted_paths.any? { |path| request.path.starts_with?(path) }
-        redirect_to operations_path, alert: "Access denied. Insufficient privileges."
+        flash[:alert] = "Access denied. Insufficient privileges."
+        redirect_to operations_path
       end
     when 'guest'
       # Guests have read-only access
       restricted_paths = ['/roles', '/audit_logs', '/users', '/operations/new', '/operations/edit']
       if restricted_paths.any? { |path| request.path.starts_with?(path) }
-        redirect_to operations_path, alert: "Access denied. Guest users have read-only access."
+        flash[:alert] = "Access denied. Guest users have read-only access."
+        redirect_to operations_path
       end
     end
   end
