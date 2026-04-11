@@ -233,10 +233,10 @@ NexOps is a comprehensive security operations platform designed for penetration 
    - **Operator**: Complete operational access for security assessments
    - **Analyst**: Read access with analysis and finding management
 
-3. **Demo Guest Access (No Signup Required)**
-   - **Email**: `demoguest@gmail.com`
-   - **Password**: Leave blank (passwordless access)
-   - **Access**: Read-only view of all operations, targets, findings, and reports
+3. **Demo Guest Access (No Login Required)**
+   - **Access**: Click "Explore as Guest" button on login page
+   - **No Credentials**: Instant access without email or password
+   - **Permissions**: Read-only view of all operations, targets, findings, and reports
 
 4. **Create your first operation**
    - Navigate to Operations

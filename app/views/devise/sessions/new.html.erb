@@ -62,13 +62,15 @@
     </div>
   <% end %>
 
-  <div class="guest-access-hint">
-    <div class="hint-card">
-      <div class="hint-icon">></div>
-      <div class="hint-content">
-        <h4>Guest Access</h4>
-        <p>Use <strong>demoguest@gmail.com</strong> with no password to explore the application with read-only access.</p>
-      </div>
+  <div class="guest-access-section">
+    <div class="guest-access-button">
+      <%= button_to "Explore as Guest", guest_access_path, method: :post, class: "btn btn-guest btn-full" do %>
+        <span class="guest-icon">></span>
+        Explore as Guest - No Login Required
+      <% end %>
+    </div>
+    <div class="guest-access-info">
+      <p>Get instant read-only access to explore the NexOps platform</p>
     </div>
   </div>
 

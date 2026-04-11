@@ -18,6 +18,19 @@ class Users::SessionsController < Devise::SessionsController
     super
   end
   
+  # POST /guest_access
+  def guest_access
+    guest_user = User.find_by(email: 'demoguest@gmail.com')
+    if guest_user && guest_user.guest_user?
+      sign_in(guest_user)
+      flash[:notice] = "Welcome! You're exploring as a guest with read-only access."
+      redirect_to root_path
+    else
+      flash[:alert] = "Guest access is not available at this time."
+      redirect_to new_user_session_path
+    end
+  end
+  
   # DELETE /resource/sign_out
   def destroy
     super
