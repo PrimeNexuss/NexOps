@@ -56,7 +56,8 @@ NexOps is a comprehensive security operations platform designed for penetration 
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| **Role-based Access Control** | Admin, Operator, Analyst, Guest roles with signup selection | :heavy_check_mark: |
+| **Role-based Access Control** | Admin, Operator, Analyst roles with signup selection | :heavy_check_mark: |
+| **Demo Guest Access** | Pre-configured guest account for application demo | :heavy_check_mark: |
 | **User Registration** | Self-service signup with Gmail email requirement | :heavy_check_mark: |
 | **Email Validation** | Gmail-only email addresses for security | :heavy_check_mark: |
 | **Granular Permissions** | Fine-grained access to system resources | :heavy_check_mark: |
@@ -231,19 +232,23 @@ NexOps is a comprehensive security operations platform designed for penetration 
    - **Admin**: Full system access and user management
    - **Operator**: Complete operational access for security assessments
    - **Analyst**: Read access with analysis and finding management
-   - **Guest**: Read-only access to view operations and reports
 
-3. **Create your first operation**
+3. **Demo Guest Access (No Signup Required)**
+   - **Email**: `demoguest@gmail.com`
+   - **Password**: Leave blank (passwordless access)
+   - **Access**: Read-only view of all operations, targets, findings, and reports
+
+4. **Create your first operation**
    - Navigate to Operations
    - Click "New Operation"
    - Fill in operation details and save
 
-4. **Add targets to your operation**
+5. **Add targets to your operation**
    - Go to your operation page
    - Click "Add Target"
    - Enter target information
 
-5. **Run security scans**
+6. **Run security scans**
    - Navigate to a target
    - Click "Scan" to simulate security assessment
    - Review generated findings

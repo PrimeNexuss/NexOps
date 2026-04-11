@@ -1,0 +1,60 @@
+<% content_for :title, "Edit Report - NexOps" %>
+
+<div class="page-header">
+  <div class="header-content">
+    <h1 class="page-title">Edit Report</h1>
+    <p class="page-subtitle">Update report details</p>
+  </div>
+</div>
+
+<div class="content-container">
+  <div class="card">
+    <div class="card-header">
+      <h3>Report Details</h3>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: @report, local: true, class: "form") do |f| %>
+        <%= render 'shared/error_messages', object: @report %>
+        
+        <div class="form-group">
+          <%= f.label :report_type, class: "form-label" %>
+          <%= f.select :report_type, 
+              options_for_select([
+                ['Executive Summary', 'executive'],
+                ['Technical Report', 'technical'],
+                ['Compliance Report', 'compliance'],
+                ['Full Assessment Report', 'full']
+              ]),
+              { prompt: "Select report type" },
+              { class: "form-control", required: true } %>
+        </div>
+        
+        <div class="form-group">
+          <%= f.label :notes, class: "form-label" %>
+          <%= f.text_area :notes, class: "form-control", rows: 4,
+              placeholder: "Add any additional notes for this report" %>
+        </div>
+        
+        <div class="form-actions">
+          <%= f.submit "Update Report", class: "btn btn-primary" %>
+          <%= link_to "Cancel", @report, class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="report-info">
+    <div class="card">
+      <div class="card-header">
+        <h4>Report Information</h4>
+      </div>
+      <div class="card-body">
+        <p><strong>Operation:</strong> <%= @report.operation.name %></p>
+        <p><strong>Generated:</strong> <%= @report.generated_at.strftime('%Y-%m-%d') %></p>
+        <p><strong>Created:</strong> <%= @report.created_at.strftime('%Y-%m-%d %H:%M') %></p>
+        <p><strong>Targets:</strong> <%= @report.operation.targets.count %></p>
+        <p><strong>Findings:</strong> <%= @report.operation.findings.count %></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -34,9 +34,9 @@ class AnalyticsController < ApplicationController
     @verified_findings = current_user.findings.where(verified: true).count
     
     # Recent activity
-    @recent_operations = current_user.operations.where('created_at >= ?', 7.days.ago).count
-    @recent_findings = current_user.findings.where('created_at >= ?', 7.days.ago).count
-    @recent_reports = current_user.reports.where('created_at >= ?', 7.days.ago).count
+    @recent_operations = current_user.operations.where('operations.created_at >= ?', 7.days.ago).count
+    @recent_findings = current_user.findings.where('findings.created_at >= ?', 7.days.ago).count
+    @recent_reports = current_user.reports.where('reports.created_at >= ?', 7.days.ago).count
     
     # Trend data
     @operations_trend = get_trend_data('operations', @period_start)
@@ -48,7 +48,7 @@ class AnalyticsController < ApplicationController
   private
 
   def get_operations_data(period_start)
-    operations = current_user.operations.where('created_at >= ?', period_start)
+    operations = current_user.operations.where('operations.created_at >= ?', period_start)
     {
       total: operations.count,
       active: operations.where(status: 'active').count,
@@ -59,7 +59,7 @@ class AnalyticsController < ApplicationController
   end
 
   def get_findings_data(period_start)
-    findings = current_user.findings.where('created_at >= ?', period_start)
+    findings = current_user.findings.where('findings.created_at >= ?', period_start)
     {
       total: findings.count,
       critical: findings.where(severity: 'critical').count,
@@ -82,7 +82,7 @@ class AnalyticsController < ApplicationController
   end
 
   def get_reports_data(period_start)
-    reports = current_user.reports.where('created_at >= ?', period_start)
+    reports = current_user.reports.where('reports.created_at >= ?', period_start)
     {
       total: reports.count,
       by_month: reports.group_by_month(period_start)
@@ -90,7 +90,7 @@ class AnalyticsController < ApplicationController
   end
 
   def get_user_activity_data(period_start)
-    audit_logs = current_user.audit_logs.where('created_at >= ?', period_start)
+    audit_logs = current_user.audit_logs.where('audit_logs.created_at >= ?', period_start)
     {
       total_actions: audit_logs.count,
       actions_by_type: audit_logs.group(:action).count,
@@ -101,10 +101,10 @@ class AnalyticsController < ApplicationController
   def get_trend_data(resource_type, period_start)
     case resource_type
     when 'operations'
-      current_user.operations.where('created_at >= ?', period_start)
+      current_user.operations.where('operations.created_at >= ?', period_start)
         .group_by_day(period_start)
     when 'findings'
-      current_user.findings.where('created_at >= ?', period_start)
+      current_user.findings.where('findings.created_at >= ?', period_start)
         .group_by_day(period_start)
     end
   end

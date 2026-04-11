@@ -16,6 +16,7 @@ class User < ApplicationRecord
     validates :name, presence: true, length: { minimum: 2, maximum: 100 }
     validates :email, presence: true, format: { with: /\A.+@gmail\.com\z/, message: 'must be a Gmail address (example@gmail.com)' }
     validates :terms_accepted, acceptance: { message: 'must be accepted' }
+    validates :password, presence: true, unless: :guest_user?
     
     def unread_notifications
       notifications.unread
@@ -31,6 +32,15 @@ class User < ApplicationRecord
     
     def has_role?(role_name)
       roles.exists?(name: role_name.to_s)
+    end
+    
+    def guest_user?
+      has_role?('guest')
+    end
+    
+    def self.authenticate_guest(email)
+      user = find_by(email: email)
+      user if user && user.guest_user?
     end
     
     def role_names
