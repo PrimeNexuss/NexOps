@@ -64,9 +64,11 @@
 
   <div class="guest-access-section">
     <div class="guest-access-button">
-      <%= button_to "Explore as Guest", guest_access_path, method: :post, class: "btn btn-guest btn-full" do %>
-        <span class="guest-icon">></span>
-        Explore as Guest - No Login Required
+      <%= form_tag guest_access_path, method: :post, class: "btn-form" do %>
+        <button type="submit" class="btn btn-guest btn-full">
+          <span class="guest-icon">></span>
+          Explore as Guest - No Login Required
+        </button>
       <% end %>
     </div>
     <div class="guest-access-info">
