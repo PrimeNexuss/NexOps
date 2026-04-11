@@ -4,5 +4,6 @@ class LandingController < ApplicationController
   
   def index
     # Landing page - no authentication required
+    render plain: "NexOps Landing Page\n\nVisit http://localhost:3000/users/sign_in to try the demo!\n\nClick 'Explore as Guest' for instant access."
   end
 end

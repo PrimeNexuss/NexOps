@@ -150,5 +150,5 @@ Rails.application.routes.draw do
   get 'landing', to: 'landing#index'
   
   # Defines the root path route ("/")
-  root "operations#index"
+  root "landing#index"
 end
