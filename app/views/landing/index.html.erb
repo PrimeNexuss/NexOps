@@ -1,119 +1,802 @@
-<h1>NexOps - Security Operations Platform</h1>
-<p>Enterprise-grade security operations platform for penetration testers and security teams.</p>
+<% content_for :title, "NexOps - Security Operations Platform" %>
 
-<div style="margin-bottom: 2rem;">
-  <a href="/users/sign_up" class="btn btn-outline">Sign Up</a>
-  <a href="/users/sign_in" class="btn btn-link">Sign In</a>
+<div class="landing-hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="gradient-text">NexOps</span>
+        <br>Security Operations Platform
+      </h1>
+      <p class="hero-subtitle">
+        Enterprise-grade security operations platform designed for penetration testers, 
+        security analysts, and cybersecurity teams. Streamline your security assessments 
+        with powerful tools, intuitive workflows, and comprehensive reporting.
+      </p>
+      
+      <div class="hero-actions">
+        <%= button_to "Try Demo Now", guest_access_path, method: :post, class: "btn btn-primary btn-large" do %>
+          <span class="btn-icon">></span>
+          Explore as Guest
+        <% end %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline btn-large" %>
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-secondary btn-large" %>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">7</span>
+          <span class="stat-label">Active Operations</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">19</span>
+          <span class="stat-label">Security Findings</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">9</span>
+          <span class="stat-label">Target Systems</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero-visual">
+      <div class="dashboard-preview">
+        <div class="preview-header">
+          <div class="preview-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <span class="preview-title">NexOps Dashboard</span>
+        </div>
+        <div class="preview-content">
+          <div class="preview-stats">
+            <div class="preview-stat">
+              <span class="preview-number">7</span>
+              <span class="preview-label">Operations</span>
+            </div>
+            <div class="preview-stat">
+              <span class="preview-number">19</span>
+              <span class="preview-label">Findings</span>
+            </div>
+            <div class="preview-stat">
+              <span class="preview-number">9</span>
+              <span class="preview-label">Targets</span>
+            </div>
+          </div>
+          <div class="preview-chart">
+            <div class="chart-bar" style="height: 80%"></div>
+            <div class="chart-bar" style="height: 60%"></div>
+            <div class="chart-bar" style="height: 90%"></div>
+            <div class="chart-bar" style="height: 70%"></div>
+            <div class="chart-bar" style="height: 85%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div style="margin-bottom: 2rem;">
-  <h2>Key Features</h2>
-  <ul>
-    <li>Operations Management</li>
-    <li>Target Discovery & Scanning</li>
-    <li>Finding Management</li>
-    <li>Analytics Dashboard</li>
-    <li>Role-Based Access Control</li>
-    <li>Professional Reports</li>
-  </ul>
-</div>
+<section class="platform-overview">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Comprehensive Security Operations Management</h2>
+      <p class="section-subtitle">
+        NexOps provides everything you need to conduct professional security assessments, 
+        from initial planning to final reporting. Our platform combines powerful automation 
+        with intuitive workflows to help security teams work more efficiently.
+      </p>
+    </div>
+    
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="overview-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="overview-title">Operations Management</h3>
+        <p class="overview-description">
+          Organize and track security assessments with comprehensive project management. 
+          Set scope, assign team members, monitor progress, and maintain complete audit trails 
+          for compliance and reporting.
+        </p>
+      </div>
+      
+      <div class="overview-card">
+        <div class="overview-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="overview-title">Target Discovery</h3>
+        <p class="overview-description">
+          Efficiently manage and scan targets across your infrastructure. Track host information, 
+          scan results, vulnerability status, and maintain a comprehensive inventory of 
+          your security assessment scope.
+        </p>
+      </div>
+      
+      <div class="overview-card">
+        <div class="overview-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="overview-title">Finding Management</h3>
+        <p class="overview-description">
+          Capture, analyze, and track security findings with severity classification, 
+          evidence attachment, and remediation tracking. Collaborate with team members 
+          to ensure comprehensive vulnerability management.
+        </p>
+      </div>
+      
+      <div class="overview-card">
+        <div class="overview-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="overview-title">Analytics Dashboard</h3>
+        <p class="overview-description">
+          Gain insights into your security posture with comprehensive analytics and reporting. 
+          Track trends, identify patterns, and generate professional reports for stakeholders 
+          and management.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div style="margin-bottom: 2rem;">
-  <h2>Try Our Interactive Demo</h2>
-  <p>Get instant access to NexOps with our guest demo account. No signup required!</p>
-  <a href="/users/sign_in" class="btn btn-primary">Start Demo</a>
-</div>
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Powerful Features for Modern Security Teams</h2>
+      <p class="section-subtitle">Everything you need to conduct comprehensive security assessments</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="feature-title">Role-Based Access Control</h3>
+        <p class="feature-description">
+          Implement proper access controls with granular permissions. Ensure team members 
+          have appropriate access levels based on their roles and responsibilities.
+        </p>
+        <ul class="feature-list">
+          <li>Admin, Operator, Analyst roles</li>
+          <li>Granular permission system</li>
+          <li>Audit logging and tracking</li>
+          <li>Secure user management</li>
+        </ul>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="feature-title">Professional Reports</h3>
+        <p class="feature-description">
+          Generate professional security reports with customizable templates. Export in 
+          multiple formats for stakeholder communication and compliance requirements.
+        </p>
+        <ul class="feature-list">
+          <li>PDF and CSV export options</li>
+          <li>Custom report templates</li>
+          <li>Executive summaries</li>
+          <li>Compliance reporting</li>
+        </ul>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="icon">></span>
+        </div>
+        <h3 class="feature-title">Real-Time Analytics</h3>
+        <p class="feature-description">
+          Monitor security operations in real-time with comprehensive dashboards and metrics. 
+          Track progress, identify trends, and make data-driven decisions.
+        </p>
+        <ul class="feature-list">
+          <li>Live dashboard updates</li>
+          <li>Trend analysis and insights</li>
+          <li>Custom metrics and KPIs</li>
+          <li>Data visualization tools</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Try Our Interactive Demo</h2>
+      <p class="section-subtitle">Experience the power of NexOps with our guest demo account</p>
+    </div>
+    
+    <div class="demo-content">
+      <div class="demo-text">
+        <h3>Instant Access, No Signup Required</h3>
+        <p>
+          Get immediate access to NexOps with our guest demo account. Explore all features, 
+          create sample operations, and see how NexOps can transform your security operations. 
+          No registration or credit card required.
+        </p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <span class="check-icon">></span>
+            <span>Full feature access</span>
+          </div>
+          <div class="demo-feature">
+            <span class="check-icon">></span>
+            <span>Sample data included</span>
+          </div>
+          <div class="demo-feature">
+            <span class="check-icon">></span>
+            <span>No signup required</span>
+          </div>
+          <div class="demo-feature">
+            <span class="check-icon">></span>
+            <span>5-minute exploration</span>
+          </div>
+        </div>
+        <%= button_to "Start Demo Now", guest_access_path, method: :post, class: "btn btn-primary btn-large" do %>
+          <span class="btn-icon">></span>
+          Explore as Guest
+        <% end %>
+      </div>
+      
+      <div class="demo-visual">
+        <div class="demo-screenshots">
+          <div class="screenshot active">
+            <div class="screenshot-frame">
+              <div class="screenshot-header">
+                <span class="screenshot-title">Operations Dashboard</span>
+              </div>
+              <div class="screenshot-content">
+                <div class="mock-cards">
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Transform Your Security Operations?</h2>
+      <p class="cta-subtitle">
+        Join thousands of security professionals who trust NexOps for their 
+        penetration testing and vulnerability management needs. Start with our free demo 
+        or sign up for full access today.
+      </p>
+      <div class="cta-actions">
+        <%= button_to "Try Free Demo", guest_access_path, method: :post, class: "btn btn-primary btn-large" do %>
+          <span class="btn-icon">></span>
+          Start Demo Now
+        <% end %>
+        <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-outline btn-large" %>
+      </div>
+    </div>
+  </div>
+</section>
 
 <style>
-  body {
-    font-family: 'Inter', sans-serif;
-    color: #ffffff;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-    margin: 0;
-    padding: 2rem;
-    min-height: 100vh;
+.landing-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  position: relative;
+}
+
+.landing-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+  background: #667eea;
+  color: #ffffff;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-preview {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-preview:hover {
+  transform: perspective(1000px) rotateY(0deg);
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.preview-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dot:first-child {
+  background: #ef4444;
+}
+
+.preview-title {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.preview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.preview-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.preview-stat {
+  text-align: center;
+  flex: 1;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+.preview-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.preview-chart {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  height: 60px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0.25rem;
+  min-height: 20px;
+}
+
+.platform-overview,
+.features-section,
+.demo-section,
+.cta-section {
+  padding: 6rem 0;
+}
+
+.platform-overview {
+  background: rgba(15, 15, 35, 0.5);
+}
+
+.features-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.demo-section {
+  background: rgba(15, 15, 35, 0.5);
+}
+
+.cta-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  margin: 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.overview-grid,
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.overview-card,
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.overview-card:hover,
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.overview-icon,
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.overview-title,
+.feature-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: #ffffff;
+}
+
+.overview-description,
+.feature-description {
+  color: #9ca3af;
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  color: #9ca3af;
+  padding: 0.5rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.feature-list li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.demo-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.demo-text h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: #ffffff;
+}
+
+.demo-text p {
+  color: #9ca3af;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.demo-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.demo-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+}
+
+.check-icon {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.demo-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.demo-screenshots {
+  position: relative;
+}
+
+.screenshot-frame {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.screenshot-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.screenshot-title {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.screenshot-content {
+  min-height: 200px;
+}
+
+.mock-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mock-card {
+  height: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+  color: #ffffff;
+}
+
+.cta-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 2rem;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+  
+  .hero-title {
+    font-size: 2.5rem;
   }
-  h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
   }
-  p {
-    font-size: 1.2rem;
-    color: #9ca3af;
-    margin-bottom: 2rem;
-  }
-  .btn {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    display: inline-block;
-    margin: 0.5rem;
-    transition: all 0.3s ease;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #ffffff;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-  }
-  .btn-outline {
-    background: transparent;
-    color: #ffffff;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-  }
-  .btn-outline:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-  }
-  .btn-link {
-    background: transparent;
-    color: #667eea;
-    border: none;
-  }
-  .btn-link:hover {
-    color: #764ba2;
-  }
-  h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #ffffff;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  
+  .hero-stats {
     gap: 1rem;
-    text-align: left;
-    max-width: 600px;
-    margin: 0 auto;
   }
-  li {
-    padding: 0.5rem 0;
-    position: relative;
-    padding-left: 1.5rem;
-    color: #9ca3af;
+  
+  .demo-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
-  li::before {
-    content: '>';
-    position: absolute;
-    left: 0;
-    color: #667eea;
-    font-weight: bold;
+  
+  .demo-features {
+    grid-template-columns: 1fr;
   }
+  
+  .overview-grid,
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .platform-overview,
+  .features-section,
+  .demo-section,
+  .cta-section {
+    padding: 4rem 0;
+  }
+}
 </style>
