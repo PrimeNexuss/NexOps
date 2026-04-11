@@ -1,5 +1,6 @@
 class OperationsController < ApplicationController
   before_action :set_operation, only: [:show, :edit, :update, :destroy, :close, :generate_report]
+  before_action :check_guest_access, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /operations (dashboard)
   def index

@@ -27,21 +27,7 @@
 
   <body>
     <!-- Navigation -->
-    <nav class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-brand">
-          🔒 NexOps
-        </div>
-        
-        <ul class="navbar-nav">
-          <li><%= link_to "Dashboard", root_path %></li>
-          <li><%= link_to "Operations", operations_path %></li>
-          <li><%= link_to "Targets", targets_path %></li>
-          <li><%= link_to "Findings", findings_path %></li>
-          <li><%= link_to "Reports", reports_path %></li>
-          <li><%= link_to "Analytics", analytics_dashboard_path %></li>
-          <li><%= link_to "Search", search_path %></li>
-        </ul>
+    <%= render 'shared/navigation' %>
         
         <!-- Search Bar -->
         <div class="navbar-search">
@@ -113,6 +99,9 @@
       </div>
     <% end %>
 
+    <!-- Breadcrumb -->
+    <%= render 'shared/breadcrumb' %>
+    
     <!-- Main Content -->
     <main class="main-content">
       <%= yield %>

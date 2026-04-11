@@ -1,0 +1,64 @@
+<% if @breadcrumb && @breadcrumb.any? %>
+  <nav class="breadcrumb-nav">
+    <div class="breadcrumb-container">
+      <% @breadcrumb.each_with_index do |crumb, index| %>
+        <% if crumb[:path] %>
+          <%= link_to crumb[:path], class: "breadcrumb-link" do %>
+            <%= crumb[:name] %>
+          <% end %>
+        <% else %>
+          <span class="breadcrumb-current"><%= crumb[:name] %></span>
+        <% end %>
+        
+        <% if index < @breadcrumb.length - 1 %>
+          <span class="breadcrumb-separator">/</span>
+        <% end %>
+      <% end %>
+    </div>
+  </nav>
+<% end %>
+
+<style>
+.breadcrumb-nav {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+}
+
+.breadcrumb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-link {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #667eea;
+}
+
+.breadcrumb-current {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: #4b5563;
+  margin: 0 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    padding: 0 1rem;
+    font-size: 0.75rem;
+  }
+}
+</style>

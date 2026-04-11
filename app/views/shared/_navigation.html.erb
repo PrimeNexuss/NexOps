@@ -1,0 +1,438 @@
+<% if user_signed_in? %>
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <%= link_to root_path, class: "nav-brand-link" do %>
+          🔒 NexOps
+        <% end %>
+      </div>
+      
+      <div class="nav-menu">
+        <ul class="nav-list">
+          <li class="nav-item <%= 'active' if controller_name == 'operations' %>">
+            <%= link_to operations_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Operations</span>
+            <% end %>
+          </li>
+          
+          <% if current_user.operator_or_admin? %>
+            <li class="nav-item <%= 'active' if controller_name == 'targets' %>">
+              <%= link_to targets_path, class: "nav-link" do %>
+                <span class="nav-icon">></span>
+                <span class="nav-text">Targets</span>
+              <% end %>
+            </li>
+          <% end %>
+          
+          <li class="nav-item <%= 'active' if controller_name == 'findings' %>">
+            <%= link_to findings_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Findings</span>
+            <% end %>
+          </li>
+          
+          <li class="nav-item <%= 'active' if controller_name == 'reports' %>">
+            <%= link_to reports_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Reports</span>
+            <% end %>
+          </li>
+          
+          <li class="nav-item <%= 'active' if controller_name == 'analytics' %>">
+            <%= link_to analytics_dashboard_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Analytics</span>
+            <% end %>
+          </li>
+          
+          <li class="nav-item <%= 'active' if controller_name == 'search' %>">
+            <%= link_to search_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Search</span>
+            <% end %>
+          </li>
+          
+          <% if current_user.admin? %>
+            <li class="nav-item <%= 'active' if controller_name == 'roles' %>">
+              <%= link_to roles_path, class: "nav-link" do %>
+                <span class="nav-icon">></span>
+                <span class="nav-text">Roles</span>
+              <% end %>
+            </li>
+            
+            <li class="nav-item <%= 'active' if controller_name == 'audit_logs' %>">
+              <%= link_to audit_logs_path, class: "nav-link" do %>
+                <span class="nav-icon">></span>
+                <span class="nav-text">Audit Logs</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      
+      <div class="nav-actions">
+        <div class="nav-notifications">
+          <%= link_to notifications_path, class: "nav-link notification-link" do %>
+            <span class="nav-icon">></span>
+            <span class="notification-count" id="notification-count">0</span>
+          <% end %>
+        </div>
+        
+        <div class="nav-user">
+          <div class="user-dropdown">
+            <button class="user-button" onclick="toggleUserDropdown()">
+              <span class="user-avatar">
+                <%= current_user.name&.first&.upcase || current_user.email&.first&.upcase || 'U' %>
+              </span>
+              <span class="user-name"><%= current_user.name || current_user.email %></span>
+              <span class="user-role"><%= current_user.role&.name&.titleize || 'User' %></span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            
+            <div class="dropdown-menu" id="user-dropdown">
+              <%= link_to edit_user_registration_path, class: "dropdown-item" do %>
+                <span class="dropdown-icon">></span>
+                Profile Settings
+              <% end %>
+              
+              <% if current_user.admin? %>
+                <%= link_to roles_path, class: "dropdown-item" do %>
+                  <span class="dropdown-icon">></span>
+                  User Management
+                <% end %>
+              <% end %>
+              
+              <div class="dropdown-divider"></div>
+              
+              <%= button_to destroy_user_session_path, method: :delete, class: "dropdown-item dropdown-logout" do %>
+                <span class="dropdown-icon">></span>
+                Sign Out
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+<% else %>
+  <!-- Landing Navigation for non-authenticated users -->
+  <nav class="landing-nav">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <%= link_to root_path, class: "nav-brand-link" do %>
+          🔒 NexOps
+        <% end %>
+      </div>
+      
+      <div class="nav-actions">
+        <%= link_to new_user_session_path, class: "nav-link" do %>
+          <span class="nav-icon">></span>
+          Sign In
+        <% end %>
+        
+        <%= link_to new_user_registration_path, class: "nav-link" do %>
+          <span class="nav-icon">></span>
+          Sign Up
+        <% end %>
+      </div>
+    </div>
+  </nav>
+<% end %>
+
+<style>
+.main-nav {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.nav-brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.nav-brand-link:hover {
+  color: #667eea;
+}
+
+.nav-menu {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #9ca3af;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+}
+
+.nav-item.active .nav-link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+}
+
+.nav-icon {
+  font-size: 1rem;
+}
+
+.nav-text {
+  font-size: 0.875rem;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-notifications {
+  position: relative;
+}
+
+.notification-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  text-decoration: none;
+  color: #9ca3af;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.notification-link:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+}
+
+.notification-count {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.nav-user {
+  position: relative;
+}
+
+.user-dropdown {
+  position: relative;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.dropdown-arrow {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.user-button:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(15, 15, 35, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  min-width: 200px;
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.user-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #9ca3af;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+}
+
+.dropdown-logout {
+  color: #ef4444;
+}
+
+.dropdown-logout:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0;
+}
+
+.landing-nav {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 1rem;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-text {
+    display: none;
+  }
+  
+  .nav-actions {
+    gap: 0.5rem;
+  }
+  
+  .user-button {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .user-name {
+    display: none;
+  }
+}
+</style>
+
+<script>
+function toggleUserDropdown() {
+  const dropdown = document.getElementById('user-dropdown');
+  if (dropdown.style.visibility === 'visible') {
+    dropdown.style.opacity = '0';
+    dropdown.style.visibility = 'hidden';
+    dropdown.style.transform = 'translateY(-10px)';
+  } else {
+    dropdown.style.opacity = '1';
+    dropdown.style.visibility = 'visible';
+    dropdown.style.transform = 'translateY(0)';
+  }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('user-dropdown');
+  const button = dropdown.previousElementSibling;
+  
+  if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+    dropdown.style.opacity = '0';
+    dropdown.style.visibility = 'hidden';
+    dropdown.style.transform = 'translateY(-10px)';
+  }
+});
+</script>
