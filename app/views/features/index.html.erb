@@ -1,0 +1,466 @@
+<% content_for :title, "Features - NexOps Security Operations Platform" %>
+
+<div class="features-hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="gradient-text">Features</span>
+        <br>Powerful Security Operations
+      </h1>
+      <p class="hero-subtitle">
+        Discover the comprehensive capabilities of NexOps Security Operations Platform. 
+        From operations management to advanced analytics, explore how our features 
+        can transform your security assessment workflow.
+      </p>
+    </div>
+    
+    <div class="hero-visual">
+      <div class="feature-showcase">
+        <div class="showcase-grid">
+          <% @features.each do |feature| %>
+            <div class="showcase-item">
+              <div class="feature-icon">
+                <span class="icon"><%= feature[:icon] %></span>
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-title"><%= feature[:title] %></h3>
+                <p class="feature-description"><%= feature[:description] %></p>
+                <div class="feature-category">
+                  <span class="category-badge"><%= feature[:category] %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="features-details">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Detailed Feature Breakdown</h2>
+      <p class="section-subtitle">
+        Explore each feature in detail and see how NexOps can enhance your security operations.
+      </p>
+    </div>
+    
+    <div class="features-grid">
+      <% @features.each do |feature| %>
+        <div class="feature-card">
+          <div class="feature-header">
+            <div class="feature-icon-large">
+              <span class="icon"><%= feature[:icon] %></span>
+            </div>
+            <div class="feature-info">
+              <h3 class="feature-title-large"><%= feature[:title] %></h3>
+              <span class="feature-category-large"><%= feature[:category] %></span>
+            </div>
+          </div>
+          
+          <div class="feature-description-full">
+            <p><%= feature[:description] %></p>
+          </div>
+          
+          <div class="feature-benefits">
+            <h4 class="benefits-title">Key Benefits:</h4>
+            <ul class="benefits-list">
+              <% feature[:benefits].each do |benefit| %>
+                <li class="benefit-item">
+                  <span class="benefit-icon">></span>
+                  <span class="benefit-text"><%= benefit %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="features-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Transform Your Security Operations?</h2>
+      <p class="cta-subtitle">
+        Experience the power of NexOps with our comprehensive feature set. 
+        Start your free trial or explore our interactive demo to see how our platform 
+        can revolutionize your security assessment workflow.
+      </p>
+      
+      <div class="cta-actions">
+        <%= link_to "Try Demo", new_user_session_path, class: "btn btn-primary btn-large" do %>
+          <span class="btn-icon">></span>
+          Explore Features
+        <% end %>
+        
+        <%= link_to "Get Started", new_user_registration_path, class: "btn btn-outline btn-large" do %>
+          <span class="btn-icon">></span>
+          Sign Up Free
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.features-hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  position: relative;
+}
+
+.features-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-showcase {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.showcase-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.showcase-item:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+}
+
+.feature-description {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+.feature-category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.features-details {
+  padding: 6rem 0;
+  background: rgba(15, 15, 35, 0.5);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  margin: 0 auto;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-icon-large {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.feature-info {
+  flex: 1;
+}
+
+.feature-title-large {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+}
+
+.feature-category-large {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feature-description-full {
+  color: #9ca3af;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.benefits-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 1rem;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  color: #9ca3af;
+}
+
+.benefit-icon {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.benefit-text {
+  font-size: 0.875rem;
+}
+
+.features-cta {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-align: center;
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 1rem;
+}
+
+.cta-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .features-cta {
+    padding: 4rem 0;
+  }
+  
+  .features-details {
+    padding: 4rem 0;
+  }
+}
+</style>

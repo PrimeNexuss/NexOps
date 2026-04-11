@@ -53,6 +53,20 @@
             <% end %>
           </li>
           
+          <li class="nav-item <%= 'active' if controller_name == 'features' %>">
+            <%= link_to features_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Features</span>
+            <% end %>
+          </li>
+          
+          <li class="nav-item <%= 'active' if controller_name == 'pricing' %>">
+            <%= link_to pricing_path, class: "nav-link" do %>
+              <span class="nav-icon">></span>
+              <span class="nav-text">Pricing</span>
+            <% end %>
+          </li>
+          
           <% if current_user.admin? %>
             <li class="nav-item <%= 'active' if controller_name == 'roles' %>">
               <%= link_to roles_path, class: "nav-link" do %>

@@ -1,0 +1,658 @@
+<% content_for :title, "Pricing - NexOps Security Operations Platform" %>
+
+<div class="pricing-hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="gradient-text">Pricing Plans</span>
+        <br>Choose Your Perfect Plan
+      </h1>
+      <p class="hero-subtitle">
+        Flexible pricing options designed for security professionals, teams, and enterprises. 
+        Start with a 14-day free trial and scale as you grow.
+      </p>
+    </div>
+    
+    <div class="hero-visual">
+      <div class="pricing-showcase">
+        <div class="price-card starter">
+          <div class="price-header">
+            <h3>Starter</h3>
+            <div class="price-tag">
+              <span class="price">$0</span>
+              <span class="period">/month</span>
+            </div>
+            <div class="price-badge">Free Forever</div>
+          </div>
+          <div class="price-features">
+            <ul class="features-list">
+              <% @plans[0][:features].each do |feature| %>
+                <li class="feature-item">
+                  <span class="feature-icon">✓</span>
+                  <span class="feature-text"><%= feature %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="price-card professional">
+          <div class="price-header">
+            <h3>Professional</h3>
+            <div class="price-tag">
+              <span class="price">$99</span>
+              <span class="period">/month</span>
+            </div>
+            <div class="price-badge popular">Most Popular</div>
+          </div>
+          <div class="price-features">
+            <ul class="features-list">
+              <% @plans[1][:features].each do |feature| %>
+                <li class="feature-item">
+                  <span class="feature-icon">✓</span>
+                  <span class="feature-text"><%= feature %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="price-card enterprise">
+          <div class="price-header">
+            <h3>Enterprise</h3>
+            <div class="price-tag">
+              <span class="price">$299</span>
+              <span class="period">/month</span>
+            </div>
+            <div class="price-badge">Custom</div>
+          </div>
+          <div class="price-features">
+            <ul class="features-list">
+              <% @plans[2][:features].each do |feature| %>
+                <li class="feature-item">
+                  <span class="feature-icon">✓</span>
+                  <span class="feature-text"><%= feature %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="pricing-comparison">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Compare Plans</h2>
+      <p class="section-subtitle">
+        Find the perfect plan for your security operations needs with our detailed comparison.
+      </p>
+    </div>
+    
+    <div class="comparison-table">
+      <div class="table-header">
+        <div class="header-cell">Features</div>
+        <div class="header-cell starter">Starter</div>
+        <div class="header-cell professional">Professional</div>
+        <div class="header-cell enterprise">Enterprise</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Price</div>
+        <div class="row-cell starter">Free</div>
+        <div class="row-cell professional">$99/month</div>
+        <div class="row-cell enterprise">Custom</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Operations</div>
+        <div class="row-cell starter">5</div>
+        <div class="row-cell professional">Unlimited</div>
+        <div class="row-cell enterprise">Unlimited</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Targets</div>
+        <div class="row-cell starter">25</div>
+        <div class="row-cell professional">Unlimited</div>
+        <div class="row-cell enterprise">Unlimited</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Findings</div>
+        <div class="row-cell starter">Basic</div>
+        <div class="row-cell professional">Advanced</div>
+        <div class="row-cell enterprise">Advanced</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Reports</div>
+        <div class="row-cell starter">Standard</div>
+        <div class="row-cell professional">Custom</div>
+        <div class="row-cell enterprise">Custom</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">API Access</div>
+        <div class="row-cell starter">-</div>
+        <div class="row-cell professional">Yes</div>
+        <div class="row-cell enterprise">Yes</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="row-cell feature-name">Support</div>
+        <div class="row-cell starter">Email</div>
+        <div class="row-cell professional">Priority</div>
+        <div class="row-cell enterprise">24/7 Dedicated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-faq">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">
+        Got questions about NexOps pricing? We've got answers.
+      </p>
+    </div>
+    
+    <div class="faq-grid">
+      <% @faq.each_with_index do |faq_item, index| %>
+        <div class="faq-item">
+          <div class="faq-question">
+            <button class="faq-toggle" onclick="toggleFAQ(<%= index %>)">
+              <span class="faq-icon">></span>
+              <span class="faq-text"><%= faq_item[:question] %></span>
+              <span class="faq-arrow">▼</span>
+            </button>
+          </div>
+          <div class="faq-answer" id="faq-answer-<%= index %>" style="display: none;">
+            <p><%= faq_item[:answer] %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Get Started?</h2>
+      <p class="cta-subtitle">
+        Choose your plan and start transforming your security operations today. 
+        All plans include a 14-day free trial.
+      </p>
+      
+      <div class="cta-actions">
+        <%= link_to "Start Free Trial", new_user_registration_path, class: "btn btn-primary btn-large" do %>
+          <span class="btn-icon">></span>
+          Start Free Trial
+        <% end %>
+        
+        <%= link_to "Contact Sales", "#", class: "btn btn-outline btn-large" do %>
+          <span class="btn-icon">></span>
+          Contact Sales
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.pricing-hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  position: relative;
+}
+
+.pricing-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pricing-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.price-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.price-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.price-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: #ffffff;
+}
+
+.price-tag {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.period {
+  font-size: 1rem;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.price-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price-badge.free {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.price-badge.popular {
+  background: #667eea;
+  color: #ffffff;
+}
+
+.price-badge.custom {
+  background: #764ba2;
+  color: #ffffff;
+}
+
+.price-features {
+  margin-top: 1.5rem;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: #9ca3af;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-icon {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.feature-text {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.pricing-comparison {
+  padding: 6rem 0;
+  background: rgba(15, 15, 35, 0.5);
+}
+
+.comparison-table {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.header-cell {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.header-cell.starter {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.header-cell.professional {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.header-cell.enterprise {
+  background: rgba(118, 75, 162, 0.1);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.row-cell {
+  padding: 1rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.row-cell.feature-name {
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.row-cell.starter {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.row-cell.professional {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.row-cell.enterprise {
+  background: rgba(118, 75, 162, 0.05);
+}
+
+.pricing-faq {
+  padding: 6rem 0;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.faq-question {
+  padding: 1.5rem;
+}
+
+.faq-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.faq-toggle:hover {
+  color: #667eea;
+}
+
+.faq-icon {
+  font-size: 1.2rem;
+}
+
+.faq-text {
+  flex: 1;
+  text-align: left;
+}
+
+.faq-arrow {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-arrow {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  padding: 0 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.pricing-cta {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-align: center;
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 1rem;
+}
+
+.cta-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .pricing-showcase {
+    grid-template-columns: 1fr;
+  }
+  
+  .comparison-table {
+    overflow-x: auto;
+  }
+  
+  .table-header {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .table-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-cell:not(.feature-name) {
+    display: none;
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pricing-hero,
+  .pricing-comparison,
+  .pricing-faq,
+  .pricing-cta {
+    padding: 4rem 0;
+  }
+}
+</style>
+
+<script>
+function toggleFAQ(index) {
+  const answer = document.getElementById(`faq-answer-${index}`);
+  const allItems = document.querySelectorAll('.faq-item');
+  const allArrows = document.querySelectorAll('.faq-arrow');
+  
+  // Close all other items
+  allItems.forEach((item, i) => {
+    if (i !== index) {
+      item.classList.remove('active');
+      allArrows[i].style.transform = 'rotate(0deg)';
+    }
+  });
+  
+  // Toggle current item
+  if (answer.style.display === 'none') {
+    answer.style.display = 'block';
+    allItems[index].classList.add('active');
+    allArrows[index].style.transform = 'rotate(180deg)';
+  } else {
+    answer.style.display = 'none';
+    allItems[index].classList.remove('active');
+    allArrows[index].style.transform = 'rotate(0deg)';
+  }
+}
+</script>

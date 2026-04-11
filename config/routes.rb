@@ -146,6 +146,12 @@ Rails.application.routes.draw do
   # Analytics Dashboard
   get '/analytics', to: 'analytics#dashboard'
 
+  # Features page route
+  get 'features', to: 'features#index'
+  
+  # Pricing page route
+  get 'pricing', to: 'pricing#index'
+  
   # Landing page route
   get 'landing', to: 'landing#index'
   
