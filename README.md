@@ -156,7 +156,7 @@ NexOps is a comprehensive security operations platform designed for penetration 
 
 - **Ruby**: 3.3.8 or higher
 - **Rails**: 8.1.2 or higher  
-- **Database**: SQLite3 (development), PostgreSQL (production recommended)
+- **Database**: PostgreSQL (development, test, and production)
 - **Node.js**: For asset compilation
 - **Git**: For version control
 - **Bundler**: For dependency management
@@ -515,7 +515,7 @@ RAILS_LOG_LEVEL=info
 ### Technology Stack
 
 - **Backend**: Ruby on Rails 8.1.2
-- **Database**: SQLite3 (dev), PostgreSQL (prod)
+- **Database**: PostgreSQL (dev, test, prod)
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Authentication**: Devise
 - **Authorization**: Pundit + Custom RBAC
