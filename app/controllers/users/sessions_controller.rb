@@ -3,6 +3,9 @@ class Users::SessionsController < Devise::SessionsController
   
   # POST /resource/sign_in
   def create
+    # Skip CSRF verification for guest login
+    skip_before_action :verify_authenticity_token if params[:user][:email] == 'demoguest@gmail.com' && params[:user][:password].blank?
+    
     # Check for guest login (passwordless)
     if params[:user][:email] == 'demoguest@gmail.com' && params[:user][:password].blank?
       guest_user = User.authenticate_guest(params[:user][:email])
