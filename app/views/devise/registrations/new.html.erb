@@ -81,13 +81,12 @@
     </div>
 
     <div class="form-group">
-      <%= f.label :role_id, class: "form-label" %>
+      <%= label_tag :role_name, "Select Your Role", class: "form-label" %>
       <div class="input-group">
         <div class="input-icon">></div>
-        <%= f.select :role_id, 
-            options_from_collection_for_select(Role.all, :id, :name_with_description),
-            { prompt: "Select your role" },
-            { class: "form-control", required: true } %>
+        <%= select_tag :role_name, 
+            options_from_collection_for_select(Role.where(name: ['admin', 'analyst', 'operator', 'guest']), :name, :name_with_description),
+            { prompt: "Select your role", class: "form-control", required: true } %>
       </div>
       <small class="form-hint">
         <span class="hint-icon">></span>

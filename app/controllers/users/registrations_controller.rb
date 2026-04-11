@@ -5,8 +5,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     # Assign role after user is created
-    if resource.persisted? && params[:user][:role_id].present?
-      role = Role.find(params[:user][:role_id])
+    if resource.persisted? && params[:role_name].present?
+      role = Role.find_by(name: params[:role_name])
       resource.assign_role(role.name) if role
     end
   end
@@ -14,7 +14,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
   
   def sign_up_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :terms_accepted, :newsletter_subscribed, :role_id)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :terms_accepted, :newsletter_subscribed)
   end
   
   def account_update_params
