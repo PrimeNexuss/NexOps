@@ -84,16 +84,71 @@ NexOps is a comprehensive security operations platform designed for penetration 
 
 <div align="center">
 
-### Dashboard
-![Dashboard](https://via.placeholder.com/800x400/1e293b/f1f5f9?text=Operations+Dashboard+with+Statistics+and+Metrics)
+### **Main Dashboard**
+![NexOps Dashboard](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=NexOps+Security+Operations+Dashboard)
+*Real-time statistics, recent operations, critical findings, and quick actions*
 
-### Analytics
-![Analytics](https://via.placeholder.com/800x400/1e293b/f1f5f9?text=Analytics+Dashboard+with+Charts+and+Trends)
+### **Operations Management**
+![Operations Management](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Operations+Management+Interface)
+*Create, manage, and track security assessments with status monitoring*
 
-### Reports
-![Reports](https://via.placeholder.com/800x400/1e293b/f1f5f9?text=Professional+Security+Reports+with+PDF+Export)
+### **Target Discovery & Scanning**
+![Target Management](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Target+Discovery+and+Scanning)
+*Add targets, configure scans, and monitor assessment progress*
+
+### **Security Findings Dashboard**
+![Findings Management](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Security+Findings+Dashboard)
+*Track, verify, and remediate security findings with severity classification*
+
+### **Professional Reports Generation**
+![Reports Generation](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Professional+Security+Reports)
+*Generate comprehensive PDF reports with executive summaries and detailed findings*
+
+### **Analytics & Intelligence**
+![Analytics Dashboard](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Analytics+and+Intelligence)
+*Advanced analytics, trend analysis, and threat intelligence visualization*
+
+### **User Management & Roles**
+![User Management](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=User+Management+and+Roles)
+*Role-based access control with granular permissions and audit trails*
+
+### **Global Search & Discovery**
+![Search Interface](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Global+Search+and+Discovery)
+*Search across operations, targets, findings, and reports with advanced filtering*
+
+### **Real-time Notifications**
+![Notifications System](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Real-time+Notifications)
+*Live alerts, notification management, and activity monitoring*
+
+### **Modern Authentication**
+![Authentication Interface](https://via.placeholder.com/800x450/1e293b/f1f5f9?text=Modern+Authentication+Interface)
+*Secure login/signup with modern UI and multi-factor authentication support*
 
 </div>
+
+### **Key UI Features Highlighted**
+
+#### **Dark Theme Design**
+- Professional security-focused dark interface
+- High contrast for extended usage sessions
+- Modern gradient effects and smooth animations
+
+#### **Responsive Design**
+- Mobile-optimized interface
+- Tablet and desktop responsive layouts
+- Touch-friendly interactions
+
+#### **Interactive Elements**
+- Real-time status updates
+- Animated statistics cards
+- Interactive charts and graphs
+- Smooth transitions and hover effects
+
+#### **Accessibility**
+- WCAG 2.1 compliant design
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast mode support
 
 ## Installation
 
