@@ -19,6 +19,8 @@ class Users::SessionsController < Devise::SessionsController
   end
   
   # POST /guest_access
+  skip_before_action :verify_authenticity_token, only: [:guest_access]
+  
   def guest_access
     guest_user = User.find_by(email: 'demoguest@gmail.com')
     if guest_user && guest_user.guest_user?
