@@ -1,6 +1,5 @@
 class AnalyticsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_analyst
 
   def dashboard
     # Time periods for analytics
