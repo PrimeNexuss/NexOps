@@ -9,11 +9,13 @@ class ApplicationController < ActionController::Base
   include Devise::Controllers::Helpers
   include Pundit::Authorization
   include PageAccess
+  include SecurityHeaders
 
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_page_title
   before_action :set_breadcrumb
+  before_action :set_security_headers
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 

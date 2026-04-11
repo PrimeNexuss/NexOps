@@ -128,4 +128,3 @@ end
   def role_params
     params.require(:role).permit(:name, permissions: [])
   end
-end
