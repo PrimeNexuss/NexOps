@@ -33,6 +33,9 @@ class Users::SessionsController < Devise::SessionsController
   
   # DELETE /resource/sign_out
   def destroy
-    super
+    signed_out = (Devise.sign_out_all_scopes ? sign_out_all_scopes : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out
+    yield if block_given?
+    redirect_to landing_path
   end
 end
