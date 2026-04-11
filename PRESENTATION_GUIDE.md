@@ -25,9 +25,16 @@ bin/rails server
    - Name: `PrimeNexuss`
    - Email: `primenexuss@nexops.com`
    - Password: `password123`
+   - **Role Selection**: Choose **Admin** (for full demo access)
    - Check "Accept Terms"
    - Click "Sign Up"
 4. **You're now logged in as PrimeNexuss!** Welcome to NexOps!
+
+**Role Options Available:**
+- **Admin**: Full system access (choose this for demo)
+- **Operator**: Complete operational access
+- **Analyst**: Read access with analysis capabilities
+- **Guest**: Read-only access
 
 ### **Step 3: Prepare Demo Data**
 ```bash
@@ -36,13 +43,13 @@ bin/rails console
 
 # Then copy-paste these commands one by one:
 user = User.find_by(email: "primenexuss@nexops.com")
-op1 = user.operations.create(name: "Web Security Assessment", description: "Test our main website")
-op2 = user.operations.create(name: "Network Penetration Test", description: "Test internal network")
+op1 = user.operations.create(name: "Web Security Assessment", scope: "Test our main website", status: "active")
+op2 = user.operations.create(name: "Network Penetration Test", scope: "Test internal network", status: "active")
 
 # Add targets
-op1.targets.create(ip_address: "192.168.1.100", hostname: "web-server-01")
-op1.targets.create(ip_address: "192.168.1.101", hostname: "web-server-02")
-op2.targets.create(ip_address: "10.0.0.50", hostname: "db-server-01")
+op1.targets.create(ip_address: "192.168.1.100", host_name: "web-server-01")
+op1.targets.create(ip_address: "192.168.1.101", host_name: "web-server-02")
+op2.targets.create(ip_address: "10.0.0.50", host_name: "db-server-01")
 
 # Add some findings
 target = op1.targets.first
