@@ -146,6 +146,9 @@ Rails.application.routes.draw do
   # Analytics Dashboard
   get '/analytics', to: 'analytics#dashboard'
 
+  # Landing page route
+  get 'landing', to: 'landing#index'
+  
   # Defines the root path route ("/")
   root "operations#index"
 end

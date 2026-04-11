@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for(:title, "NexOps - Security Operations Platform") %></title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "landing", "data-turbo-track": "reload" %>
+  
+  <!-- Meta Tags -->
+  <meta name="description" content="NexOps - Enterprise-grade security operations platform for penetration testers, security analysts, and cybersecurity teams.">
+  <meta name="keywords" content="security operations, penetration testing, cybersecurity, vulnerability management, security assessment">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="NexOps - Security Operations Platform">
+  <meta property="og:description" content="Enterprise-grade security operations platform for penetration testers and security teams.">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon -->
+  <%= favicon_link_tag 'favicon.ico' %>
+  
+  <!-- Turbo -->
+  <%= javascript_include_tag "turbo", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="landing-body">
+  
+  <!-- Navigation -->
+  <nav class="landing-nav">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <h1 class="brand-title">NexOps</h1>
+        <span class="brand-subtitle">Security Operations Platform</span>
+      </div>
+      
+      <div class="nav-links">
+        <%= link_to "Features", "#features", class: "nav-link" %>
+        <%= link_to "Demo", "#demo", class: "nav-link" %>
+        <%= link_to "Pricing", "#pricing", class: "nav-link" %>
+        <%= link_to "Sign In", new_user_session_path, class: "nav-link" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Main Content -->
+  <%= yield %>
+  
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>NexOps</h3>
+          <p>Enterprise-grade security operations platform for modern cybersecurity teams.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><%= link_to "Features", "#features", class: "footer-link" %></li>
+            <li><%= link_to "Demo", "#demo", class: "footer-link" %></li>
+            <li><%= link_to "Pricing", "#pricing", class: "footer-link" %></li>
+            <li><%= link_to "Documentation", "/api/docs", class: "footer-link" %></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><%= link_to "About", "#", class: "footer-link" %></li>
+            <li><%= link_to "Blog", "#", class: "footer-link" %></li>
+            <li><%= link_to "Contact", "#", class: "footer-link" %></li>
+            <li><%= link_to "GitHub", "https://github.com/PrimeNexuss/NexOps", class: "footer-link", target: "_blank" %></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><%= link_to "Privacy Policy", "#", class: "footer-link" %></li>
+            <li><%= link_to "Terms of Service", "#", class: "footer-link" %></li>
+            <li><%= link_to "Security", "#", class: "footer-link" %></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 NexOps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+</body>
+</html>
