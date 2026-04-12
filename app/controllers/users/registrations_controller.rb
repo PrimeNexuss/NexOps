@@ -1,5 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout 'auth'
+  skip_before_action :verify_authenticity_token, only: [:create]
   
   # POST /resource
   def create
